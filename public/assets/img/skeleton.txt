@@ -1,0 +1,80 @@
+university-website/
+├── index.html              # Homepage
+├── admissions.html         # Admissions page
+├── styles/
+│   ├── main.css            # Global styles
+│   ├── admissions.css      # Page-specific styles
+│   └── responsive.css      # Media queries
+├── scripts/
+│   ├── main.js             # Shared JS (header/footer)
+│   ├── admissions.js       # Admissions form logic
+│   └── pdfGenerator.js     # Client-side PDF creation (jsPDF)
+├── assets/
+│   ├── images/             # Campus photos, logos
+│   └── fonts/              # Custom fonts
+└── README.md
+
+two
+
+university-website/
+├── client/                  # Frontend (React + TypeScript)
+│   ├── public/
+│   │   ├── index.html
+│   │   └── assets/         # Static files (fonts, logos)
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Header/
+│   │   │   │   ├── Header.tsx
+│   │   │   │   └── Header.scss
+│   │   │   ├── Footer/
+│   │   │   ├── ProgramCard/
+│   │   │   └── PDFDownloadButton.tsx  # PDF feature component
+│   │   ├── pages/
+│   │   │   ├── Home/
+│   │   │   ├── Admissions/
+│   │   │   │   ├── AdmissionsForm.tsx
+│   │   │   │   └── ApplicationConfirmation.tsx  # PDF download page
+│   │   │   ├── Research/
+│   │   │   └── ...         # Other pages
+│   │   ├── services/
+│   │   │   ├── api.ts      # Axios API calls
+│   │   │   └── auth.ts     # Authentication utils
+│   │   ├── styles/
+│   │   │   ├── _variables.scss
+│   │   │   └── global.scss
+│   │   ├── App.tsx
+│   │   └── main.tsx
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── vite.config.ts       # or webpack.config.js
+│
+├── server/                 # Backend (Node.js + Express)
+│   ├── src/
+│   │   ├── controllers/
+│   │   │   ├── applicationController.ts
+│   │   │   └── pdfController.ts       # PDF generation logic
+│   │   ├── routes/
+│   │   │   ├── applicationRoutes.ts
+│   │   │   └── pdfRoutes.ts
+│   │   ├── models/
+│   │   │   ├── Application.ts         # MongoDB schema
+│   │   │   └── PDFModel.ts            # Stores PDF metadata
+│   │   ├── services/
+│   │   │   ├── pdfGenerator.ts        # Uses PDFKit
+│   │   │   └── emailService.ts        # Nodemailer setup
+│   │   ├── utils/
+│   │   │   ├── authMiddleware.ts      # JWT validation
+│   │   │   └── errorHandler.ts
+│   │   ├── app.ts
+│   │   └── server.ts
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── .env.example
+│
+├── docker/                 # Containerization
+│   ├── client.Dockerfile
+│   └── server.Dockerfile
+│
+├── docker-compose.yml      # Orchestrates MongoDB, client, server
+├── .gitignore
+└── README.me

@@ -1,0 +1,109 @@
+<?php
+
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
+use App\Models\user_group;
+use App\Models\permissions;
+use App\Models\role_permissions;
+use App\Models\User;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\CampusController;
+use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\FeeController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\StudentCourseController;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('welcome');
+})->name('welcome');
+
+Route::get('/dashboard', function () {
+    $user = auth()->user();
+    $permissions = $user->user_group->permissions;
+
+    return view('dashboard', compact(
+        'permissions',
+  
+    ));
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::post('/update-cart', [CheckoutController::class, 'updateCart']);
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    //user groups
+    Route::get('/setting', [SettingsController::class, 'userGroup'])->name('settings.usergroup');
+    Route::post('/settings.create-usergroup', [SettingsController::class, 'createUserGroups'])->name('create-usergroup');
+    Route::delete('/user-group/{id}', [SettingsController::class, 'DeleteUserGroup'])->name('delete-usergroup');
+    Route::get('/settings.user-group/{id}', [SettingsController::class, 'editUserGroup'])->name('settings.editUsergroup');
+    Route::put('/user-group/{id}/update', [SettingsController::class, 'updateUserGroup'])->name('settings.update');
+    //permissions
+    Route::get('/settings', [SettingsController::class, 'userRole'])->name('settings.userRole');
+    Route::post('/settings.create-userRole', [SettingsController::class, 'createUserRole'])->name('create-userRole');
+    Route::delete('/user-role/{id}', [SettingsController::class, 'DeleteUserRole'])->name('delete-userrole');
+    Route::get('/settings.user-role/{id}', [SettingsController::class, 'editUserRole'])->name('settings.editUserRole');
+    Route::put('/user-role/{id}/update', [SettingsController::class, 'updateUserRole'])->name('settings.updateRole');
+    // User Management
+
+    Route::get('/settings.users', [SettingsController::class, 'user'])->name('settings.user');
+    Route::get('/settings.userlist', [SettingsController::class, 'userlist'])->name('settings.userlist');
+    Route::post('/settings.create-user', [SettingsController::class, 'createUser'])->name('create-user');
+    Route::get('/settings.user/{id}', [SettingsController::class, 'editUser'])->name('settings.editUser');
+    Route::post('/users/{id}/update', [SettingsController::class, 'updateUser'])->name('setting.update');
+    Route::patch('/settings/{id}/deactivate', [SettingsController::class, 'deactivate'])->name('deactivateUser');
+    Route::patch('/settings/{id}/activate', [SettingsController::class, 'activate'])->name('activateUser');
+    // System settings
+    Route::get('/settings.systemSettings', [SettingsController::class, 'systemSettings'])->name('settings.systemSettings');
+    Route::get('/settings.Settings', [SettingsController::class, 'Settings'])->name('settings.Settings');
+    Route::post('/settings.create-settings', [SettingsController::class, 'createSettings'])->name('create-settings');
+    Route::delete('/system-settings/{id}', [SettingsController::class, 'DeleteSettings'])->name('delete-settings');
+    Route::post('/save-role-permissions', [SettingsController::class, 'store'])->name('saveRolePermissions');
+
+        Route::resource('campuses', CampusController::class);
+        Route::resource('schools', SchoolController::class);
+        Route::delete('campuses/{campus}/programs/{program}', [CampusController::class, 'detach'])
+    ->name('campuses.programs.detach');
+    Route::resource('departments', DepartmentController::class);
+
+    // routes/web.php
+Route::resource('programs', ProgramController::class);
+Route::delete('/programs/{program_id}/courses/{course_id}', [ProgramController::class, 'detachCourse'])->name('course-program.detach');
+Route::post('/programs/{program}/assign-courses', [ProgramController::class, 'assignCourses'])->name('programs.assignCourses');
+
+
+Route::resource('courses', CourseController::class);
+Route::resource('fees', FeeController::class);
+Route::resource('students', StudentController::class);
+
+Route::get('/studentspaymentssummary', [StudentController::class, 'allPayments'])->name('students.paymentStatement');
+
+Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
+Route::get('/payments/{student}', [PaymentController::class, 'transactions'])->name('payments.transactions');
+Route::get('/my-statement', [PaymentController::class, 'studentStatement'])->name('payments.student_statement');
+Route::get('/register-courses', [StudentCourseController::class, 'showCourseRegistrationForm'])->name('students.register_courses');
+Route::post('/register-courses', [StudentCourseController::class, 'registerCourses'])->name('students.registerCourses');
+
+});
+ Route::get('/enrollment.applynow', [EnrollmentController::class, 'index'])->name('enrollment.applynow');
+require __DIR__.'/auth.php';

@@ -1,0 +1,105 @@
+Core Requirements
+Visual Identity & Branding
+
+Clean, professional design with the university’s official colors, typography, and logo.
+
+High-quality imagery (campus life, research labs, student diversity, events) and video backgrounds.
+
+Consistent use of white space, grid layouts, and modern UI elements (e.g., cards, hover effects, subtle animations).
+
+Responsive Design
+
+Fully optimized for mobile, tablet, and desktop.
+
+Hamburger menu for mobile with clear hierarchy.
+
+Fast loading times (optimized images, lazy loading).
+
+Navigation & Structure
+
+Header: Sticky menu with dropdowns for:
+
+Academics (Programs, Departments, Courses)
+
+Admissions (Undergraduate, Graduate, International)
+
+Research (Centers, Labs, Publications)
+
+About (History, Leadership, Mission)
+
+Campus Life (Housing, Clubs, Events)
+
+Footer: Quick links (Contact, Careers, Newsroom), social media icons, newsletter signup, and accessibility tools.
+
+Search bar prominently placed in the header.
+
+Homepage Essentials
+
+Hero section with a rotating carousel of key messages (e.g., "Apply Now," "Explore Research Opportunities," "Upcoming Events").
+
+Quick-access cards for: Admissions, Programs, Virtual Tour, and Alumni Portal.
+
+Highlights section: Latest news, research breakthroughs, and student achievements.
+
+Call-to-action buttons (e.g., "Request Info," "Schedule a Visit").
+
+Academic Programs Page
+
+Filterable program directory (by degree level, department, or keyword).
+
+Program-specific pages with:
+
+Overview, faculty, curriculum, and career outcomes.
+
+Student testimonials and related research projects.
+
+"Apply Now" and "Contact Advisor" buttons.
+
+Admissions Portal
+
+Step-by-step guides for applicants (checklists, deadlines, requirements).
+
+Interactive tuition calculator and financial aid resources.
+
+Integration with application systems (e.g., Common App, Slate).
+
+Research Hub
+
+Showcase key research areas with multimedia (videos, infographics).
+
+Faculty profiles with bios, publications, and contact info.
+
+Grants and collaboration opportunities for students/partners.
+
+Student Life Section
+
+Dynamic gallery of campus clubs, athletics, arts, and cultural events.
+
+Housing and dining guides with 360° virtual tours.
+
+Calendar of academic and social events (filterable by category).
+
+Alumni & Giving
+
+Alumni success stories and networking platforms.
+
+Donation portal with options for recurring gifts, scholarships, and capital projects.
+
+Impact reports and endowment transparency.
+
+Accessibility & Compliance
+
+ADA/WCAG compliance (alt text, keyboard navigation, screen-reader compatibility).
+
+Language toggle for international audiences.
+
+Privacy policy and GDPR compliance.
+
+Inspiration & Features from Top Universities
+Stanford/MIT: Bold typography, card-based layouts, and research-focused storytelling.
+
+Harvard: Elegant, timeless design with strong emphasis on alumni engagement.
+
+Cambridge: Interactive maps and historical storytelling.
+
+UC Berkeley: Dynamic news feeds and event calendars.
