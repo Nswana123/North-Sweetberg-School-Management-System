@@ -68,10 +68,7 @@
             <input type="text" name="title" id="title" value="{{ $course->title ?? '' }}" class="form-control" required>
         </div>
 
-        <div class="flex-fill mb-3">
-            <label for="credit_hours" class="form-label">Credit Hours</label>
-            <input type="number" name="credit_hours" id="credit_hours" value="{{ $course->credit_hours ?? '' }}" class="form-control" required>
-        </div>
+
     </div>
 
     <button class="btn btn-primary">{{ isset($course) ? 'Update' : 'Create' }}</button>

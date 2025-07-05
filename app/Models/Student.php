@@ -52,5 +52,8 @@ public function courseRegistrations()
 {
     return $this->hasMany(StudentCourseRegistration::class);
 }
-
+ public function results()
+    {
+        return $this->hasMany(StudentResult::class);
+    }
 }

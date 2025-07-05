@@ -17,6 +17,8 @@ use App\Http\Controllers\FeeController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\StudentCourseController;
+use App\Http\Controllers\AdminCourseController;
+use App\Http\Controllers\ResultsController;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -103,6 +105,19 @@ Route::get('/payments/{student}', [PaymentController::class, 'transactions'])->n
 Route::get('/my-statement', [PaymentController::class, 'studentStatement'])->name('payments.student_statement');
 Route::get('/register-courses', [StudentCourseController::class, 'showCourseRegistrationForm'])->name('students.register_courses');
 Route::post('/register-courses', [StudentCourseController::class, 'registerCourses'])->name('students.registerCourses');
+ Route::get('/registered-students', [AdminCourseController::class, 'registeredStudentsByYear'])->name('students.registered_students_by_year');
+
+     Route::get('/caenter', [ResultsController::class, 'showEnterCAForm'])->name('results.enterCAs');
+    Route::post('/casave', [ResultsController::class, 'storeCA'])->name('results.saveCAs');
+    Route::get('/caview', [ResultsController::class, 'viewCAMarks'])->name('results.viewCAs');
+
+    // Exam
+    Route::get('/examenter', [ResultsController::class, 'showEnterExamForm'])->name('results.enterExam');
+    Route::post('/examsave', [ResultsController::class, 'storeExam'])->name('results.saveExam');
+    Route::get('/examview', [ResultsController::class, 'viewExamMarks'])->name('results.viewExam');
+    Route::get('/resultsfinal', [ResultsController::class, 'viewFinalResults'])->name('results.viewfinal');
+    Route::get('/finalstudent/{student}', [ResultsController::class, 'showStudentFinalResults'])->name('results.viewstudentResults');
+
 
 });
  Route::get('/enrollment.applynow', [EnrollmentController::class, 'index'])->name('enrollment.applynow');

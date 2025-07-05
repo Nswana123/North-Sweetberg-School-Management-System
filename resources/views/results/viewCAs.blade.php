@@ -65,30 +65,37 @@
             <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <div class="header-title">
-      <h2>Add Course</h2>
+         <h5 class="mb-0">
+  View CA Marks
+</h5>
+        </div>
+        <a href="{{ route('results.enterCAs') }}" class="btn btn-primary">Enter CA Marks</a>
     </div>
-</div>
+
     <div class="card-body">
-  <form method="POST" action="{{ isset($course) ? route('courses.update', $course->id) : route('courses.store') }}">
-    @csrf
-    @if(isset($course)) @method('PUT') @endif
-
-    <div class="d-flex gap-3 flex-wrap">
-        <div class="flex-fill mb-3">
-            <label for="code" class="form-label">Course Code</label>
-            <input type="text" name="code" id="code" value="{{ $course->code ?? '' }}" class="form-control" required>
-        </div>
-
-        <div class="flex-fill mb-3">
-            <label for="title" class="form-label">Course Title</label>
-            <input type="text" name="title" id="title" value="{{ $course->title ?? '' }}" class="form-control" required>
-        </div>
-
-    </div>
-
-    <button class="btn btn-primary">{{ isset($course) ? 'Update' : 'Create' }}</button>
+       <form method="GET">
+    <select name="course_id" onchange="this.form.submit()" class="form-select mb-3">
+        <option value="">Select Course</option>
+        @foreach($courses as $course)
+            <option value="{{ $course->id }}" {{ request('course_id') == $course->id ? 'selected' : '' }}>
+                {{ $course->code }} - {{ $course->title }}
+            </option>
+        @endforeach
+    </select>
 </form>
-
+@if($results->count())
+<table class="table table-bordered">
+    <thead><tr><th>Student</th><th>CA Mark</th></tr></thead>
+    <tbody>
+        @foreach($results as $res)
+        <tr>
+            <td>{{ $res->student->user->student_number }} - {{ $res->student->user->fname }}</td>
+            <td>{{ $res->ca_mark }}</td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
+@endif
     </div>
 </div>
 

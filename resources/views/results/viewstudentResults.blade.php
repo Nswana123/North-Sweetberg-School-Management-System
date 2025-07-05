@@ -65,30 +65,49 @@
             <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <div class="header-title">
-      <h2>Add Course</h2>
-    </div>
+<div class="d-flex flex-wrap gap-3 align-items-center mb-3">
+  <h3 class="mb-0 flex-grow-1">Final Results - {{ $student->user->fname }} {{ $student->user->lname }}</h3>
+
+  <div><strong>Student Number:</strong> {{ $student->user->student_number }}</div>
+  <div><strong>Program:</strong> {{ $student->program->name ?? '-' }}</div>
+  <div><strong>Year of Study:</strong> {{ $student->year_of_study }}</div>
 </div>
-    <div class="card-body">
-  <form method="POST" action="{{ isset($course) ? route('courses.update', $course->id) : route('courses.store') }}">
-    @csrf
-    @if(isset($course)) @method('PUT') @endif
 
-    <div class="d-flex gap-3 flex-wrap">
-        <div class="flex-fill mb-3">
-            <label for="code" class="form-label">Course Code</label>
-            <input type="text" name="code" id="code" value="{{ $course->code ?? '' }}" class="form-control" required>
         </div>
-
-        <div class="flex-fill mb-3">
-            <label for="title" class="form-label">Course Title</label>
-            <input type="text" name="title" id="title" value="{{ $course->title ?? '' }}" class="form-control" required>
-        </div>
-
     </div>
 
-    <button class="btn btn-primary">{{ isset($course) ? 'Update' : 'Create' }}</button>
-</form>
-
+    <div class="card-body">
+       @forelse($results as $year => $yearResults)
+        <h5 class="mb-2">Academic Year: {{ $year }}</h5>
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                    <th>Course Code</th>
+                    <th>Title</th>
+                    <th>CA</th>
+                    <th>Exam</th>
+                    <th>Final</th>
+                    <th>Grade</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($yearResults as $result)
+                <tr>
+                    <td>{{ $result->course->code }}</td>
+                    <td>{{ $result->course->title }}</td>
+                    <td>{{ $result->ca_mark ?? '-' }}</td>
+                    <td>{{ $result->exam_mark ?? '-' }}</td>
+                    <td><strong>{{ $result->final_mark ?? '-' }}</strong></td>
+                    <td><span class="badge bg-{{ $result->grade === 'F' ? 'danger' : ($result->grade === 'A+' ? 'success' : 'secondary') }}">{{ $result->grade ?? '-' }}</span></td>
+                    <td>{{ $result->comment ?? '-' }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @empty
+        <p class="text-muted">No results available.</p>
+    @endforelse
     </div>
 </div>
 

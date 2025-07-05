@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('courses', function (Blueprint $table) {
-            $table->id();
-             $table->string('code')->unique();
-            $table->string('title');
-            $table->timestamps();
+        Schema::create('grading_settings', function (Blueprint $table) {
+               $table->id();
+    $table->integer('min');
+    $table->integer('max');
+    $table->string('grade');
+    $table->string('comment');
+    $table->timestamps();
         });
     }
 
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('courses');
+        Schema::dropIfExists('grading_settings');
     }
 };

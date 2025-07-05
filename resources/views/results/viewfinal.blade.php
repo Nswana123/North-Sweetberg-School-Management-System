@@ -65,30 +65,65 @@
             <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <div class="header-title">
-      <h2>Add Course</h2>
-    </div>
+   <h3>Final Results </h3>
 </div>
+         <!-- Filter Button -->
+    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
+        Filter Students
+    </button>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <form method="GET" action="{{ route('results.viewfinal') }}" class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="filterModalLabel">Filter by Student Number</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+            <div class="mb-3">
+                <label for="student_number" class="form-label">Student Number</label>
+                <input type="text" name="student_number" id="student_number"
+                       value="{{ request('student_number') }}" class="form-control" placeholder="e.g. STD0001">
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <a href="{{ route('results.viewfinal') }}" class="btn btn-secondary">Reset</a>
+            <button type="submit" class="btn btn-primary">Apply Filter</button>
+        </div>
+    </form>
+  </div>
+</div>
+
     <div class="card-body">
-  <form method="POST" action="{{ isset($course) ? route('courses.update', $course->id) : route('courses.store') }}">
-    @csrf
-    @if(isset($course)) @method('PUT') @endif
-
-    <div class="d-flex gap-3 flex-wrap">
-        <div class="flex-fill mb-3">
-            <label for="code" class="form-label">Course Code</label>
-            <input type="text" name="code" id="code" value="{{ $course->code ?? '' }}" class="form-control" required>
-        </div>
-
-        <div class="flex-fill mb-3">
-            <label for="title" class="form-label">Course Title</label>
-            <input type="text" name="title" id="title" value="{{ $course->title ?? '' }}" class="form-control" required>
-        </div>
-
-    </div>
-
-    <button class="btn btn-primary">{{ isset($course) ? 'Update' : 'Create' }}</button>
-</form>
-
+     <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Student Number</th>
+                <th>Name</th>
+                <th>Program</th>
+                <th>Year of Study</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($students as $i => $student)
+            <tr>
+                <td>{{ $i + 1 }}</td>
+                <td>{{ $student->user->student_number }}</td>
+                <td>{{ $student->user->fname }} {{ $student->user->lname }}</td>
+                <td>{{ $student->program->name ?? '-' }}</td>
+                <td>Year {{ $student->year_of_study }}</td>
+                <td>
+                    <a href="{{ route('results.viewstudentResults', $student->id) }}" class="btn btn-sm btn-primary">View Results</a>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
     </div>
 </div>
 

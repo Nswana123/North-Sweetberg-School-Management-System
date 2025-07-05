@@ -65,30 +65,72 @@
             <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <div class="header-title">
-      <h2>Add Course</h2>
+         <h5 class="mb-0">
+Enter Exam Marks
+</h5>
+        </div>
     </div>
-</div>
+
     <div class="card-body">
-  <form method="POST" action="{{ isset($course) ? route('courses.update', $course->id) : route('courses.store') }}">
-    @csrf
-    @if(isset($course)) @method('PUT') @endif
+@php
+use App\Models\StudentResult;
+@endphp
 
-    <div class="d-flex gap-3 flex-wrap">
-        <div class="flex-fill mb-3">
-            <label for="code" class="form-label">Course Code</label>
-            <input type="text" name="code" id="code" value="{{ $course->code ?? '' }}" class="form-control" required>
-        </div>
-
-        <div class="flex-fill mb-3">
-            <label for="title" class="form-label">Course Title</label>
-            <input type="text" name="title" id="title" value="{{ $course->title ?? '' }}" class="form-control" required>
-        </div>
-
-    </div>
-
-    <button class="btn btn-primary">{{ isset($course) ? 'Update' : 'Create' }}</button>
+<!-- Course selection -->
+<form method="GET">
+    <select name="course_id" onchange="this.form.submit()" class="form-select mb-3">
+        <option value="">Select Course</option>
+        @foreach($courses as $course)
+            <option value="{{ $course->id }}" {{ $selected == $course->id ? 'selected' : '' }}>
+                {{ $course->code }} - {{ $course->title }}
+            </option>
+        @endforeach
+    </select>
 </form>
 
+@if($selected)
+<form method="POST" action="{{ route('results.saveExam') }}">
+    @csrf
+    <input type="hidden" name="course_id" value="{{ $selected }}">
+    <input type="hidden" name="academic_year" value="{{ now()->year }}">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Exam Mark</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($students as $student)
+                @php
+                    $result = StudentResult::where('student_id', $student->id)
+                        ->where('course_id', $selected)
+                        ->where('academic_year', now()->year)
+                        ->first();
+                @endphp
+                <tr>
+                    <td>{{ $student->user->student_number }} - {{ $student->user->fname }}</td>
+                    <td>
+                        <input
+                            name="marks[{{ $student->id }}]"
+                            type="number"
+                            class="form-control"
+                            min="0"
+                            max="60"
+                            step="0.1"
+                            value="{{ old('marks.' . $student->id, optional($result)->exam_mark) }}"
+                            required
+                        >
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <button class="btn btn-success">Save Exam Marks</button>
+</form>
+@endif
     </div>
 </div>
 

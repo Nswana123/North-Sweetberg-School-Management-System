@@ -30,7 +30,6 @@ class CourseController extends Controller
         $request->validate([
             'code' => 'required|unique:courses',
             'title' => 'required|string',
-            'credit_hours' => 'required|integer',
         ]);
 
         Course::create($request->all());
@@ -49,7 +48,7 @@ class CourseController extends Controller
         $request->validate([
             'code' => 'required|unique:courses,code,' . $course->id,
             'title' => 'required|string',
-            'credit_hours' => 'required|integer',
+
         ]);
 
         $course->update($request->all());

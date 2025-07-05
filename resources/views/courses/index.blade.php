@@ -70,7 +70,7 @@
     <span class="badge bg-primary">{{ $courses->total() }}</span>
 </h5>
         </div>
-        <a href="{{ route('courses.create') }}" class="btn btn-primary">Add Program</a>
+        <a href="{{ route('courses.create') }}" class="btn btn-primary">Add Course</a>
     </div>
 
     <div class="card-body">
@@ -81,7 +81,6 @@
                 <tr>
                     <td>{{ $course->code }}</td>
                     <td>{{ $course->title }}</td>
-                    <td>{{ $course->credit_hours }}</td>
                     <td>
                         <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-sm btn-warning">Edit</a>
                         <form action="{{ route('courses.destroy', $course->id) }}" method="POST" style="display:inline;">
