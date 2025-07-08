@@ -132,7 +132,7 @@ class StudentController extends Controller
     });
                $user = auth()->user();
         $permissions = $user->user_group->permissions;
-    return view('students..paymentStatement', compact('summaries','permissions'));
+    return view('students.paymentStatement', compact('summaries','permissions'));
 }
 
 }

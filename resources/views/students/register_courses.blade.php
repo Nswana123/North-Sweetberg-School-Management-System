@@ -52,7 +52,7 @@
             @endforeach
         </ul>
     </div>
-@endif
+@endif 
 
 @if (session('success'))
     <div class="alert alert-success">
@@ -126,7 +126,7 @@
                             <tr>
                                 <td>{{ $registration->course->code }}</td>
                                 <td>{{ $registration->course->title }}</td>
-                                <td>{{ $registration->created_at->format('d M Y') }}</td>
+                                <td>{{ $registration->created_at }}</td>
                             </tr>
                         @endforeach
                     </tbody>

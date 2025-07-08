@@ -63,14 +63,17 @@
          <div class="row">
             <div class="col-xl-12 col-lg-12">
             <div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <div class="header-title">
-         <h5 class="mb-0">
-  View CA Marks
-</h5>
-        </div>
-        <a href="{{ route('results.enterCAs') }}" class="btn btn-primary">Enter CA Marks</a>
+   <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+    <!-- Title -->
+    <div class="header-title">
+        <h5 class="mb-0">View CA Marks</h5>
     </div>
+
+    <!-- Enter Manually Button -->
+    <div>
+        <a href="{{ route('results.enterCAs') }}" class="btn btn-primary mt-3 mt-md-0">Enter CA Marks</a>
+    </div>
+</div>
 
     <div class="card-body">
        <form method="GET">

@@ -102,9 +102,9 @@ Route::get('/studentspaymentssummary', [StudentController::class, 'allPayments']
 
 Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
 Route::get('/payments/{student}', [PaymentController::class, 'transactions'])->name('payments.transactions');
-Route::get('/my-statement', [PaymentController::class, 'studentStatement'])->name('payments.student_statement');
-Route::get('/register-courses', [StudentCourseController::class, 'showCourseRegistrationForm'])->name('students.register_courses');
-Route::post('/register-courses', [StudentCourseController::class, 'registerCourses'])->name('students.registerCourses');
+Route::get('/mystatement', [PaymentController::class, 'studentStatement'])->name('payments.student_statement');
+Route::get('/register_courses', [StudentCourseController::class, 'showCourseRegistrationForm'])->name('students.register_courses');
+Route::post('/registerCourses', [StudentCourseController::class, 'registerCourses'])->name('students.registerCourses');
  Route::get('/registered-students', [AdminCourseController::class, 'registeredStudentsByYear'])->name('students.registered_students_by_year');
 
      Route::get('/caenter', [ResultsController::class, 'showEnterCAForm'])->name('results.enterCAs');
@@ -117,6 +117,17 @@ Route::post('/register-courses', [StudentCourseController::class, 'registerCours
     Route::get('/examview', [ResultsController::class, 'viewExamMarks'])->name('results.viewExam');
     Route::get('/resultsfinal', [ResultsController::class, 'viewFinalResults'])->name('results.viewfinal');
     Route::get('/finalstudent/{student}', [ResultsController::class, 'showStudentFinalResults'])->name('results.viewstudentResults');
+
+    Route::post('/caUpload', [ResultsController::class, 'uploadCA'])->name('results.uploadCAPost');
+    Route::post('/examUpload', [ResultsController::class, 'uploadExam'])->name('results.uploadExamPost');
+
+        Route::get('results/ca', [ResultsController::class, 'viewCA'])->name('students.resultsCa');
+    Route::get('results/final', [ResultsController::class, 'viewFinal'])->name('students.resultsFinal');
+
+        Route::get('/student-exam-slip', [App\Http\Controllers\ResultsController::class, 'SlipView'])->name('students.examSlip');
+    Route::get('/student-exam-slip/pdf', [App\Http\Controllers\ResultsController::class, 'SlipexportPdf'])->name('students.pdfexamSlip.pdf');
+
+Route::get('/results/final/pdf/{student}', [ResultsController::class, 'exportFinalResultsPdf'])->name('results.final.pdf');
 
 
 });

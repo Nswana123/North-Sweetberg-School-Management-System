@@ -83,7 +83,7 @@ public function studentStatement()
             'breakdown' => [],
             'transactions' => [],
         ];
-        return view('payments.student_statement', compact('statement'))
+        return view('payments.student_statement', compact('statement','permissions'))
             ->with('error', 'Student record not found.');
     }
 
@@ -135,6 +135,14 @@ public function studentStatement()
     ];
 
     return view('payments.student_statement', compact('statement','permissions'));
+}
+public function transactions(Student $student)
+{
+    $student->load('user', 'payments'); // eager load related user and payments
+      $user = auth()->user();
+     $permissions = $user->user_group->permissions;
+
+    return view('payments.transactions', compact('student','permissions'));
 }
 
     /**

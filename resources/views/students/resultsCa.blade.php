@@ -63,90 +63,41 @@
          <div class="row">
             <div class="col-xl-12 col-lg-12">
             <div class="card">
-  <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
- 
-    <!-- Upload Form -->
-    <div class="flex-grow-1">
-        <div class="bg-light p-3 rounded shadow-sm">
-            <h6 class="mb-3">Upload Exam Marks (Excel)</h6>
-
-            @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
-
-            <form method="POST" action="{{ route('results.uploadExamPost') }}" enctype="multipart/form-data">
-                @csrf
-                <div class="mb-2">
-                    <label for="file" class="form-label">Select Excel File</label>
-                    <input type="file" name="file" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-success">Upload</button>
-            </form>
-        </div>
-    </div>
-
+<div class="card-header d-flex justify-content-between align-items-center flex-wrap">
+    <div class="d-flex align-items-center gap-2">
+        <h5 class="mb-0">CA Results</h5>
+  </div>
 </div>
 
+
     <div class="card-body">
-@php
-use App\Models\StudentResult;
-@endphp
+    <p><strong>Student:</strong> {{ $student->user->fname }} {{ $student->user->lname }}</p>
+    <p><strong>Student Number:</strong> {{ $student->user->student_number }}</p>
 
-<!-- Course selection -->
-<form method="GET">
-    <select name="course_id" onchange="this.form.submit()" class="form-select mb-3">
-        <option value="">Select Course</option>
-        @foreach($courses as $course)
-            <option value="{{ $course->id }}" {{ $selected == $course->id ? 'selected' : '' }}>
-                {{ $course->code }} - {{ $course->title }}
-            </option>
-        @endforeach
-    </select>
-</form>
-
-@if($selected)
-<form method="POST" action="{{ route('results.saveExam') }}">
-    @csrf
-    <input type="hidden" name="course_id" value="{{ $selected }}">
-    <input type="hidden" name="academic_year" value="{{ now()->year }}">
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Student</th>
-                <th>Exam Mark</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($students as $student)
-                @php
-                    $result = StudentResult::where('student_id', $student->id)
-                        ->where('course_id', $selected)
-                        ->where('academic_year', now()->year)
-                        ->first();
-                @endphp
+    @forelse($results as $year => $yearResults)
+        <h5 class="mt-4">Academic Year: {{ $year }}</h5>
+        <table class="table table-bordered">
+            <thead>
                 <tr>
-                    <td>{{ $student->user->student_number }} - {{ $student->user->fname }}</td>
-                    <td>
-                        <input
-                            name="marks[{{ $student->id }}]"
-                            type="number"
-                            class="form-control"
-                            min="0"
-                            max="60"
-                            step="0.1"
-                            value="{{ old('marks.' . $student->id, optional($result)->exam_mark) }}"
-                            required
-                        >
-                    </td>
+                    <th>Course Code</th>
+                    <th>Course Title</th>
+                    <th>CA Mark</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-    <button class="btn btn-success">Save Exam Marks</button>
-</form>
-@endif
+            </thead>
+            <tbody>
+                @foreach($yearResults as $result)
+                    <tr>
+                        <td>{{ $result->course->code }}</td>
+                        <td>{{ $result->course->title }}</td>
+                        <td>{{ $result->ca_mark }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @empty
+        <p class="text-muted">No CA results available.</p>
+    @endforelse
+</div>
     </div>
 </div>
 

@@ -75,10 +75,11 @@
 
     <div class="card-body">
         <table class="table">
-        <thead><tr><th>Code</th><th>Title</th><th>Credit Hours</th><th>Actions</th></tr></thead>
+        <thead><tr><th>Course ID</th><th>Code</th><th>Title</th><th>Actions</th></tr></thead>
         <tbody>
             @foreach($courses as $course)
                 <tr>
+                    <td>{{ $course->id }}</td>
                     <td>{{ $course->code }}</td>
                     <td>{{ $course->title }}</td>
                     <td>

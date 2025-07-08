@@ -63,13 +63,30 @@
          <div class="row">
             <div class="col-xl-12 col-lg-12">
             <div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <div class="header-title">
-         <h5 class="mb-0">
-Enter CA Marks
-</h5>
+<div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+ 
+    <!-- Upload Form -->
+    <div class="flex-grow-1">
+        <div class="bg-light p-3 rounded shadow-sm">
+            <h6 class="mb-3">Upload CA Marks (Excel)</h6>
+
+            @if(session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+
+            <form method="POST" action="{{ route('results.uploadCAPost') }}" enctype="multipart/form-data">
+                @csrf
+                <div class="mb-2">
+                    <label for="file" class="form-label">Select Excel File</label>
+                    <input type="file" name="file" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-success">Upload</button>
+            </form>
         </div>
     </div>
+
+</div>
+
 
     <div class="card-body">
         @php

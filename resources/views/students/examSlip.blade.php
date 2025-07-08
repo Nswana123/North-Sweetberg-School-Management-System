@@ -63,90 +63,47 @@
          <div class="row">
             <div class="col-xl-12 col-lg-12">
             <div class="card">
-  <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
- 
-    <!-- Upload Form -->
-    <div class="flex-grow-1">
-        <div class="bg-light p-3 rounded shadow-sm">
-            <h6 class="mb-3">Upload Exam Marks (Excel)</h6>
-
-            @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
-
-            <form method="POST" action="{{ route('results.uploadExamPost') }}" enctype="multipart/form-data">
-                @csrf
-                <div class="mb-2">
-                    <label for="file" class="form-label">Select Excel File</label>
-                    <input type="file" name="file" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-success">Upload</button>
-            </form>
+ <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
+            <h4 class="mb-0">Exam Slip</h4>
+            <a href="{{ route('students.pdfexamSlip.pdf') }}" class="btn btn-danger">📄 Export to PDF</a>
         </div>
-    </div>
 
-</div>
 
-    <div class="card-body">
-@php
-use App\Models\StudentResult;
-@endphp
+    <div class="card-body text-center">
+    <img src="{{ asset('images/graduate.png') }}" alt="Student Icon" width="80" class="mb-3">
 
-<!-- Course selection -->
-<form method="GET">
-    <select name="course_id" onchange="this.form.submit()" class="form-select mb-3">
-        <option value="">Select Course</option>
-        @foreach($courses as $course)
-            <option value="{{ $course->id }}" {{ $selected == $course->id ? 'selected' : '' }}>
-                {{ $course->code }} - {{ $course->title }}
-            </option>
-        @endforeach
-    </select>
-</form>
+    <p><strong>Student Name:</strong> {{ $student->user->fname }} {{ $student->user->lname }}</p>
+    <p><strong>Student ID:</strong> {{ $student->user->student_number }}</p>
+    <p><strong>Program:</strong> {{ $student->program->name }}</p>
+    <p><strong>Academic Year:</strong> {{ $student->year_of_study }}</p>
 
-@if($selected)
-<form method="POST" action="{{ route('results.saveExam') }}">
-    @csrf
-    <input type="hidden" name="course_id" value="{{ $selected }}">
-    <input type="hidden" name="academic_year" value="{{ now()->year }}">
-
-    <table class="table">
-        <thead>
+    <table class="table table-bordered mt-4">
+        <thead class="table-success">
             <tr>
-                <th>Student</th>
-                <th>Exam Mark</th>
+                <th>Course Code</th>
+                <th>Course Name</th>
+                <th>Invigilator</th>
+                <th>Signature</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($students as $student)
-                @php
-                    $result = StudentResult::where('student_id', $student->id)
-                        ->where('course_id', $selected)
-                        ->where('academic_year', now()->year)
-                        ->first();
-                @endphp
+            @forelse($registeredCourses as $registration)
                 <tr>
-                    <td>{{ $student->user->student_number }} - {{ $student->user->fname }}</td>
-                    <td>
-                        <input
-                            name="marks[{{ $student->id }}]"
-                            type="number"
-                            class="form-control"
-                            min="0"
-                            max="60"
-                            step="0.1"
-                            value="{{ old('marks.' . $student->id, optional($result)->exam_mark) }}"
-                            required
-                        >
-                    </td>
+                    <td>{{ $registration->course->code }}</td>
+                    <td>{{ $registration->course->title }}</td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="4" class="text-muted">No registered courses found for this academic year.</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
-
-    <button class="btn btn-success">Save Exam Marks</button>
-</form>
-@endif
+</div>
+    </div>
+</div>
     </div>
 </div>
 
