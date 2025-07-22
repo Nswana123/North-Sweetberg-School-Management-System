@@ -135,4 +135,15 @@ class StudentController extends Controller
     return view('students.paymentStatement', compact('summaries','permissions'));
 }
 
+public function profile()
+{
+    $user = auth()->user();
+        $permissions = $user->user_group->permissions;
+    $student = \App\Models\Student::with([
+        'user', 'campus', 'program', 'nextOfKin', 'address'
+    ])->where('user_id', $user->id)->firstOrFail();
+
+    return view('students.studentProfile', compact('student','permissions'));
+}
+
 }

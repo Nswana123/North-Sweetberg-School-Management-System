@@ -19,6 +19,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\StudentCourseController;
 use App\Http\Controllers\AdminCourseController;
 use App\Http\Controllers\ResultsController;
+use App\Http\Controllers\LectureClassController;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -129,6 +130,29 @@ Route::post('/registerCourses', [StudentCourseController::class, 'registerCourse
 
 Route::get('/results/final/pdf/{student}', [ResultsController::class, 'exportFinalResultsPdf'])->name('results.final.pdf');
 
+Route::get('/student/profile', [StudentController::class, 'profile'])->name('students.studentProfile');
+
+
+// lecture functions
+    Route::get('classes', [LectureClassController::class, 'index'])->name('classes.index');
+    Route::get('classes/create', [LectureClassController::class, 'create'])->name('classes.create');
+    Route::post('classes', [LectureClassController::class, 'store'])->name('classes.store');
+    Route::get('classes-manage/{class}', [LectureClassController::class, 'manage'])->name('classes.manage');
+
+    // Notes
+    Route::post('classes/{class}/notes', [LectureClassController::class, 'uploadNote'])->name('classes.notes.upload');
+
+    // Messages
+    Route::post('classes/{class}/message', [LectureClassController::class, 'sendMessage'])->name('classes.message.send');
+
+    // Media
+    Route::post('classes/{class}/media', [LectureClassController::class, 'sendMedia'])->name('classes.media.send');
+
+    // Assignments
+    Route::post('classes/{class}/assignment', [LectureClassController::class, 'createAssignment'])->name('classes.assignment.create');
+
+    // Tests
+    Route::post('classes/{class}/test', [LectureClassController::class, 'createTest'])->name('classes.test.create');
 
 });
  Route::get('/enrollment.applynow', [EnrollmentController::class, 'index'])->name('enrollment.applynow');

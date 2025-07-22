@@ -458,7 +458,7 @@
         </ul>
       </nav><!-- .navbar -->
 
-      <a class="btn-portal" href="admissions">Student Portal</a>
+      <a class="btn-portal" href="{{route('login')}}">Student Portal</a>
 
 
     </div>

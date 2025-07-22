@@ -747,7 +747,7 @@
                 <div class="form-header">
                     <h2><i class="bi bi-pencil-square me-2"></i>Admission Application</h2>
                 </div>
-                
+
                 <div class="progress-container">
                     <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
