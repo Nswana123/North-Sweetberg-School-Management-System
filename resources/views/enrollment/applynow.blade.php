@@ -747,22 +747,6 @@
                 <div class="form-header">
                     <h2><i class="bi bi-pencil-square me-2"></i>Admission Application</h2>
                 </div>
-{{--                 
-@foreach ($programs as $program )
-  <p>Program Name  {{$program->name}}  </p>
-  <p>Program Code  {{$program->program_code}} </p>
-      <p> Program Department  {{$program->department->name}} </p>
-      <p> Program Details of practical {{$program->is_practical}} </p>
-      {{-- <p> Program Details of practical {{$schools->name}} </p> --}}
-
-    {{-- <p>Program Amount  {{$program->fees->amount}} </p> --}}
-{{-- @foreach($program->fees as $fee)
-    <p>Program Fee Amount: {{$fee->amount}}</p>
-  @endforeach
-
-@endforeach --}}
-
-
 
                 <div class="progress-container">
                     <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>

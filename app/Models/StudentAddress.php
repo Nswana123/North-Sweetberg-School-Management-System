@@ -15,7 +15,7 @@ class StudentAddress extends Model
         'postal_address',
         'town',
         'province',
-        'country',
+        'country', 
     ];
 
     /**

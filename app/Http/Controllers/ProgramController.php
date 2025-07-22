@@ -20,7 +20,7 @@ class ProgramController extends Controller
 public function create()
 {
     $departments = Department::with('school')->get();
-     $user = auth()->user();
+     $user = auth()->user(); 
         $permissions = $user->user_group->permissions;
     return view('programs.create', compact('departments','permissions'));
 }
