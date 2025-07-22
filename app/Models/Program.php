@@ -2,11 +2,23 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Program extends Model
 {
-       protected $fillable = ['name','program_code','mode_of_study','qualification','is_practical','duration', 'department_id'];
+    use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'program_code',
+        'mode_of_study',
+        'qualification',
+        'is_practical',
+        'duration',
+        'department_id',
+        'level' // Added this field to support degree/diploma/short course filtering
+    ];
 
     public function department()
     {
@@ -27,10 +39,18 @@ class Program extends Model
 
     public function campuses()
     {
-        return $this->belongsToMany(Campus::class, 'campus_program'); // make sure this table exists
+        return $this->belongsToMany(Campus::class, 'campus_program');
     }
-    public function school()
-{
-    return $this->department ? $this->department->school() : null;
-}
+
+    // Improved school relationship accessor
+    public function getSchoolAttribute()
+    {
+        return $this->department->school ?? null;
+    }
+
+    // Scope for filtering by level
+    public function scopeOfLevel($query, $level)
+    {
+        return $query->where('level', $level);
+    }
 }

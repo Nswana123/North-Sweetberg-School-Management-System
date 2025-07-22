@@ -747,7 +747,23 @@
                 <div class="form-header">
                     <h2><i class="bi bi-pencil-square me-2"></i>Admission Application</h2>
                 </div>
-                
+{{--                 
+@foreach ($programs as $program )
+  <p>Program Name  {{$program->name}}  </p>
+  <p>Program Code  {{$program->program_code}} </p>
+      <p> Program Department  {{$program->department->name}} </p>
+      <p> Program Details of practical {{$program->is_practical}} </p>
+      {{-- <p> Program Details of practical {{$schools->name}} </p> --}}
+
+    {{-- <p>Program Amount  {{$program->fees->amount}} </p> --}}
+{{-- @foreach($program->fees as $fee)
+    <p>Program Fee Amount: {{$fee->amount}}</p>
+  @endforeach
+
+@endforeach --}}
+
+
+
                 <div class="progress-container">
                     <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
@@ -755,29 +771,26 @@
                 <form id="admissionForm" novalidate>
                     <!-- Step 1: Program Selection -->
                     <div class="form-step active" id="step1">
-                        <h3 class="section-title">Select Your Program</h3>
-                        <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <label for="schoolSelect" class="form-label">School/Faculty</label>
-                                <select class="form-select" id="schoolSelect" required>
-                                    <option value="" selected disabled>-- Select School --</option>
-                                    <option value="engineering">School of Engineering</option>
-                                    <option value="humanities">School of Humanities & Business</option>
-                                    <option value="agriculture">School of Agriculture</option>
-                                    <option value="education">School of Education</option>
-                                    <option value="short">Short Courses</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-4">
-                                <label for="programLevel" class="form-label">Program Level</label>
-                                <select class="form-select" id="programLevel" required>
-                                    <option value="" selected disabled>-- Select Level --</option>
-                                    <option value="degree">Degree Program</option>
-                                    <option value="diploma">Diploma Program</option>
-                                    <option value="short" class="short-only" style="display:none">Short Course</option>
-                                </select>
-                            </div>
-                        </div>
+  <div class="col-md-6 mb-4">
+    <label for="schoolSelect" class="form-label">School/Faculty</label>
+    <select class="form-select" id="schoolSelect" required>
+        <option value="" selected disabled>-- Select School --</option>
+        @foreach($schools as $school)
+            <option value="{{ $school->id }}">{{ $school->name }}</option>
+        @endforeach
+    </select>
+</div>
+
+<div class="col-md-6 mb-4">
+    <label for="programLevel" class="form-label">Program Level</label>
+    <select class="form-select" id="programLevel" required>
+        <option value="" selected disabled>-- Select Level --</option>
+        <option value="degree">Degree Program</option>
+        <option value="diploma">Diploma Program</option>
+        <option value="short" class="short-only" style="display:none">Short Course</option>
+    </select>
+</div>
+
                         
                         <div id="courseContainer" class="row mt-3 d-none">
                             <!-- Courses will be loaded here dynamically -->
@@ -1516,32 +1529,102 @@
         showStep(currentStep);
 
         // School select change handler
-        document.getElementById('schoolSelect').addEventListener('change', function() {
-            const school = this.value;
-            const programLevelSelect = document.getElementById('programLevel');
-            const shortOption = programLevelSelect.querySelector('.short-only');
-            if (school === 'short') {
-                shortOption.style.display = 'block';
-                programLevelSelect.value = 'short';
-            } else {
-                shortOption.style.display = 'none';
-                programLevelSelect.value = '';
-            }
-            document.getElementById('courseContainer').classList.add('d-none');
-            document.querySelector('.btn-next-step').disabled = true;
-        });
+    // Update the school select change handler
+document.getElementById('schoolSelect').addEventListener('change', function() {
+    const schoolId = this.value;
+    const programLevelSelect = document.getElementById('programLevel');
+    const shortOption = programLevelSelect.querySelector('.short-only');
+    
+    // Show/hide short course option based on school selection
+    if (schoolId === '5') { // Assuming '5' is your short courses school ID
+        shortOption.style.display = 'block';
+    } else {
+        shortOption.style.display = 'none';
+        programLevelSelect.value = '';
+    }
+    
+    document.getElementById('courseContainer').classList.add('d-none');
+    document.querySelector('.btn-next-step').disabled = true;
+});
 
-        document.getElementById('programLevel').addEventListener('change', function() {
-            const school = document.getElementById('schoolSelect').value;
-            const programLevel = this.value;
-            if (school && programLevel) {
-                loadCourses(school, programLevel);
-            } else {
-                document.getElementById('courseContainer').classList.add('d-none');
-                document.querySelector('.btn-next-step').disabled = true;
-            }
-        });
+// Update the program level change handler
+document.getElementById('programLevel').addEventListener('change', function() {
+    const schoolId = document.getElementById('schoolSelect').value;
+    const programLevel = this.value;
+    
+    if (schoolId && programLevel) {
+        loadCourses(schoolId, programLevel);
+    } else {
+        document.getElementById('courseContainer').classList.add('d-none');
+        document.querySelector('.btn-next-step').disabled = true;
+    }
+});
 
+// Update the loadCourses function
+function loadCourses(schoolId, programLevel) {
+    console.log(`Loading courses for school: ${schoolId}, level: ${programLevel}`); // Debug log
+    
+    const courseContainer = document.getElementById('courseContainer');
+    courseContainer.innerHTML = '<div class="col-12 text-center py-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+    
+    fetch(`/api/programs?school_id=${schoolId}&level=${programLevel}`)
+        .then(response => { 
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(programs => {
+            console.log('API Response:', programs); // Debug log
+            if (!Array.isArray(programs)) {
+                throw new Error('Invalid response format - expected array');
+            }
+            
+            courseContainer.innerHTML = '';
+            
+            if (programs.length === 0) {
+                courseContainer.innerHTML = '<div class="col-12 text-center py-4"><p>No programs available for this selection</p></div>';
+                return;
+            }
+            programs.forEach(program => {
+                const courseCard = document.createElement('div');
+                courseCard.className = 'col-md-4 mb-3';
+                courseCard.innerHTML = `
+                    <div class="card course-card" data-course="${program.name}" data-program-id="${program.id}">
+                        <div class="course-card-header">
+                            <h5 class="mb-0">${program.name}</h5>
+                        </div>
+                        <div class="course-card-body">
+                            <p class="course-card-text">
+                                <i class="bi bi-clock me-1"></i> Duration: ${program.duration}
+                            </p>
+                            <p class="course-card-text">
+                                <i class="bi bi-cash-coin me-1"></i> Tuition: ZMW ${program.fees[0]?.amount?.toLocaleString() || 'N/A'}/year
+                            </p>
+                            <button type="button" class="btn btn-select-course w-100">
+                                <i class="bi bi-check-lg me-1"></i> Select
+                            </button>
+                        </div>
+                    </div>
+                `;
+                courseContainer.appendChild(courseCard);
+            });
+            
+            courseContainer.classList.remove('d-none');
+            document.querySelectorAll('.btn-select-course').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    document.querySelectorAll('.course-card').forEach(c => c.classList.remove('selected'));
+                    this.closest('.course-card').classList.add('selected');
+                    document.querySelector('.btn-next-step').disabled = false;
+                });
+            });
+        })
+        .catch(error => {
+            console.error('Error loading programs:', error);
+            courseContainer.innerHTML = '<div class="col-12 text-center py-4"><p>Error loading programs. Please try again.</p></div>';
+        });
+}
         // Next step buttons
         document.querySelectorAll('.btn-next-step').forEach(button => {
             button.addEventListener('click', function() {
@@ -1696,45 +1779,62 @@
             return isValid;
         }
         
-        function loadCourses(school, programLevel) {
-            const courseContainer = document.getElementById('courseContainer');
+  // Modify the loadCourses function to fetch from the server
+// Modify the loadCourses function to fetch from the server
+function loadCourses(schoolId, programLevel) {
+    const courseContainer = document.getElementById('courseContainer');
+    courseContainer.innerHTML = '<div class="col-12 text-center py-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+    
+    // Fetch programs from the server
+    fetch(`/api/programs?school_id=${schoolId}&level=${programLevel}`)
+        .then(response => response.json())
+        .then(programs => {
             courseContainer.innerHTML = '';
-            if (courses[school] && courses[school][programLevel]) {
-                courses[school][programLevel].forEach(course => {
-                    const courseCard = document.createElement('div');
-                    courseCard.className = 'col-md-4 mb-3';
-                    courseCard.innerHTML = `
-                        <div class="card course-card" data-course="${course}">
-                            <div class="course-card-header">
-                                <h5 class="mb-0">${course}</h5>
-                            </div>
-                            <div class="course-card-body">
-                                <p class="course-card-text">
-                                    <i class="bi bi-clock me-1"></i> Duration: ${programLevel === 'short' ? '3-12 months' : programLevel === 'diploma' ? '2 years' : '4 years'}
-                                </p>
-                                <p class="course-card-text">
-                                    <i class="bi bi-cash-coin me-1"></i> Tuition: ZMW ${tuitionFees[school][programLevel].toLocaleString()}/year
-                                </p>
-                                <button type="button" class="btn btn-select-course w-100">
-                                    <i class="bi bi-check-lg me-1"></i> Select
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    courseContainer.appendChild(courseCard);
-                });
-                courseContainer.classList.remove('d-none');
-                document.querySelectorAll('.btn-select-course').forEach(btn => {
-                    btn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        document.querySelectorAll('.course-card').forEach(c => c.classList.remove('selected'));
-                        this.closest('.course-card').classList.add('selected');
-                        document.querySelector('.btn-next-step').disabled = false;
-                    });
-                });
+            
+            if (programs.length === 0) {
+                courseContainer.innerHTML = '<div class="col-12 text-center py-4"><p>No programs available for this selection</p></div>';
+                return;
             }
-        }
-        
+            
+            programs.forEach(program => {
+                const courseCard = document.createElement('div');
+                courseCard.className = 'col-md-4 mb-3';
+                courseCard.innerHTML = `
+                    <div class="card course-card" data-course="${program.name}" data-program-id="${program.id}">
+                        <div class="course-card-header">
+                            <h5 class="mb-0">${program.name}</h5>
+                        </div>
+                        <div class="course-card-body">
+                            <p class="course-card-text">
+                                <i class="bi bi-clock me-1"></i> Duration: ${program.duration}
+                            </p>
+                            <p class="course-card-text">
+                                <i class="bi bi-cash-coin me-1"></i> Tuition: ZMW ${program.fees[0]?.amount?.toLocaleString() || 'N/A'}/year
+                            </p>
+                            <button type="button" class="btn btn-select-course w-100">
+                                <i class="bi bi-check-lg me-1"></i> Select
+                            </button>
+                        </div>
+                    </div>
+                `;
+                courseContainer.appendChild(courseCard);
+            });
+            
+            courseContainer.classList.remove('d-none');
+            document.querySelectorAll('.btn-select-course').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    document.querySelectorAll('.course-card').forEach(c => c.classList.remove('selected'));
+                    this.closest('.course-card').classList.add('selected');
+                    document.querySelector('.btn-next-step').disabled = false;
+                });
+            });
+        })
+        .catch(error => {
+            console.error('Error loading programs:', error);
+            courseContainer.innerHTML = '<div class="col-12 text-center py-4"><p>Error loading programs. Please try again.</p></div>';
+        });
+}
         function handleFileUpload(event, previewId, multiple = false) {
             const files = event.target.files;
             const previewContainer = document.getElementById(previewId);
