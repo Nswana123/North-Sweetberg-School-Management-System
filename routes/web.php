@@ -20,6 +20,7 @@ use App\Http\Controllers\StudentCourseController;
 use App\Http\Controllers\AdminCourseController;
 use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\LectureClassController;
+use App\Http\Controllers\AdmissionController;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -154,6 +155,11 @@ Route::get('/student/profile', [StudentController::class, 'profile'])->name('stu
     // Tests
     Route::post('classes/{class}/test', [LectureClassController::class, 'createTest'])->name('classes.test.create');
 
+
+
 });
  Route::get('/enrollment.applynow', [EnrollmentController::class, 'index'])->name('enrollment.applynow');
+ Route::get('/get-programs', [EnrollmentController::class, 'getPrograms']);
+ Route::post('/admissionSumbit', [AdmissionController::class, 'store'])->name('admission.submit');
+
 require __DIR__.'/auth.php';

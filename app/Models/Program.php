@@ -36,6 +36,10 @@ class Program extends Model
     {
         return $this->hasMany(Fee::class);
     }
+    public function firstFee()
+{
+    return $this->hasOne(Fee::class)->orderBy('year_of_study')->oldest(); // Adjust ordering if needed
+}
 
     public function campuses()
     {

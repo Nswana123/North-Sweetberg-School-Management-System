@@ -14,30 +14,15 @@ class EnrollmentController extends Controller
         $schools = School::with(['departments.programs' => function($query) {
             $query->orderBy('name');
         }])->orderBy('name')->get();
+
+       $programs = Program::with('firstFee')->get();
+
         
-        return view('enrollment.applynow', compact('schools'));
+        
+    $shortCourses = Program::where('qualification', 'Short Course')->orderBy('name')->get();
+        return view('enrollment.applynow', compact('schools','programs','shortCourses'));
     }
 
-    // New API endpoint to fetch programs
-    public function getPrograms(Request $request)
-    {
-        $schoolId = $request->input('school_id');
-        $level = $request->input('level');
-        
-        // Validate inputs
-        if (!$schoolId || !$level) {
-            return response()->json(['error' => 'Missing parameters'], 400);
-        }
-        
-        // Get programs based on school and level
-        $programs = Program::whereHas('department.school', function($query) use ($schoolId) {
-                $query->where('id', $schoolId);
-            })
-            ->where('level', $level)
-            ->with('fees')
-            ->orderBy('name')
-            ->get();
-            
-        return response()->json($programs);
-    }
+
+
 }
