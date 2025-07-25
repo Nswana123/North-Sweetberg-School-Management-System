@@ -155,7 +155,14 @@ Route::get('/student/profile', [StudentController::class, 'profile'])->name('stu
     // Tests
     Route::post('classes/{class}/test', [LectureClassController::class, 'createTest'])->name('classes.test.create');
 
+// enrollmetn
+Route::get('/admissions', [EnrollmentController::class, 'PendingEnrollment'])->name('enrollment.PendingEnrollment');
+Route::get('/admissions/{id}', [EnrollmentController::class, 'showPendingEnrollment'])->name('enrollment.showPendingEnrollment');
+Route::post('/admissions/{id}/approve', [EnrollmentController::class, 'approve'])->name('enrollment.approve');
+Route::post('/admissions/{id}/reject', [EnrollmentController::class, 'reject'])->name('enrollment.reject');
 
+Route::get('/approvedadmissions', [EnrollmentController::class, 'approvedEnrollment'])->name('enrollment.approvedEnrollment');
+Route::get('/rejectedadmissions', [EnrollmentController::class, 'rejectedEnrollment'])->name('enrollment.rejectedEnrollment');
 
 });
  Route::get('/enrollment.applynow', [EnrollmentController::class, 'index'])->name('enrollment.applynow');

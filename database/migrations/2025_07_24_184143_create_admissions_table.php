@@ -36,7 +36,7 @@ return new class extends Migration
     $table->string('id_document_path')->nullable();
     $table->string('certificates_path')->nullable();
     $table->string('photo_path')->nullable();
-     $table->string('admission_status')->nullable();
+     $table->string('admission_status')->default('pending');
     $table->timestamps();
         });
     }

@@ -491,6 +491,68 @@
                     </li>
                   @endif
 
+ @if($permissions->contains('name', 'Enrollment')) 
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#sidebar-enroll" role="button" aria-expanded="false" aria-controls="sidebar-enroll">
+                            <i class="icon">
+                                <i class="fas fa-chart-line"></i>
+                            </i>
+                            <span class="item-name">Admissions</span>
+                            <i class="right-icon">
+                                <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </i>
+                        </a>
+                        <!-- --->
+                        <ul class="sub-nav collapse" id="sidebar-enroll" data-bs-parent="#sidebar-enroll">
+                        <li class="nav-item">
+                                <a class="nav-link " href="{{ route('enrollment.PendingEnrollment') }}">
+                                    <i class="icon">
+                                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                            <g>
+                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                            </g>
+                                        </svg>
+                                    </i>
+                                    <i class="sidenav-mini-icon"> pa </i>
+                                    <span class="item-name">Pending Admission</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " href="{{ route('enrollment.approvedEnrollment') }}">
+                                    <i class="icon">
+                                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                            <g>
+                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                            </g>
+                                        </svg>
+                                    </i>
+                                    <i class="sidenav-mini-icon"> pa </i>
+                                    <span class="item-name">Approved Admission</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " href="{{ route('enrollment.rejectedEnrollment') }}">
+                                    <i class="icon">
+                                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                            <g>
+                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                            </g>
+                                        </svg>
+                                    </i>
+                                    <i class="sidenav-mini-icon"> ra </i>
+                                    <span class="item-name">Rejected Admissions</span>
+                                </a>
+                            </li>
+                            
+                        </ul>
+                    </li>
+                    @endif 
+
+
+
                              @if($permissions->contains('name', 'Students'))
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{route('students.index')}}">
