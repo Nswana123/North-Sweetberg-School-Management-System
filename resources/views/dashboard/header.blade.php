@@ -16,7 +16,7 @@
                 
                 
                 
-               <img src="{{ asset('image/Logo.png') }}" alt="PaYpaRy Logo" class="filter-skyblue" style="height: 24px; width: auto;">
+               {{-- <img src="{{ asset('image/Logo.png') }}" alt="PaYpaRy Logo" class="filter-skyblue" style="height: 24px; width: auto;"> --}}
             </a>
             <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
                 <i class="icon">
