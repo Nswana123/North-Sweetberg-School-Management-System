@@ -21,6 +21,19 @@ use App\Http\Controllers\AdminCourseController;
 use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\LectureClassController;
 use App\Http\Controllers\AdmissionController;
+use App\Http\Controllers\AdmissionSettingController;
+use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\AcademicCalendarController;
+use App\Models\Campus;
+use App\Models\School;
+use App\Models\Department;
+use App\Models\Program;
+use App\Models\Announcement;
+use App\Models\Student;
+use App\Models\Course;
+use App\Models\StudentCourseRegistration;
+use App\Models\AcademicCalendar;
+use App\Models\Admission;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -42,9 +55,82 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     $user = auth()->user();
     $permissions = $user->user_group->permissions;
+// Basic counts
+        $data = [
+            'campuses' => Campus::count(),
+            'schools' => School::count(),
+            'departments' => Department::count(),
+            'programs' => Program::count(),
+            'students' => Student::count(),
+            'currentYearStudents' => Student::whereYear('created_at', Carbon::now()->year)->count(),
+           'staff' => User::where('group_id', '!=', 2)->count(),
 
+        ];
+
+        // Admission statistics
+        $admissionStats = [
+            'total' => Admission::count(),
+            'pending' => Admission::where('admission_status', 'pending')->count(),
+            'approved' => Admission::where('admission_status', 'approved')->count(),
+            'rejected' => Admission::where('admission_status', 'rejected')->count(),
+        ];
+
+        // Monthly admission data for graph
+        $monthlyAdmissions = Admission::selectRaw('
+            YEAR(created_at) as year, 
+            MONTH(created_at) as month, 
+            COUNT(*) as total,
+            SUM(CASE WHEN admission_status = "pending" THEN 1 ELSE 0 END) as pending,
+            SUM(CASE WHEN admission_status = "approved" THEN 1 ELSE 0 END) as approved,
+            SUM(CASE WHEN admission_status = "rejected" THEN 1 ELSE 0 END) as rejected
+        ')
+        ->whereYear('created_at', Carbon::now()->year)
+        ->groupBy('year', 'month')
+        ->orderBy('year')
+        ->orderBy('month')
+        ->get();
+
+        // Format monthly data for chart
+        $chartData = [
+            'labels' => [],
+            'datasets' => [
+                'total' => [],
+                'pending' => [],
+                'approved' => [],
+                'rejected' => []
+            ]
+        ];
+
+        foreach ($monthlyAdmissions as $monthly) {
+            $monthName = Carbon::createFromDate($monthly->year, $monthly->month, 1)->format('M');
+            $chartData['labels'][] = $monthName;
+            $chartData['datasets']['total'][] = $monthly->total;
+            $chartData['datasets']['pending'][] = $monthly->pending;
+            $chartData['datasets']['approved'][] = $monthly->approved;
+            $chartData['datasets']['rejected'][] = $monthly->rejected;
+        }
+
+ $user = auth()->user();
+    // Get student data if exists
+    $student = $user->student; // Assuming you have a student() relationship in User model
+    
+    $Studentdata = [
+        'announcements' => Announcement::where('target', 'students')
+            ->whereDate('start_date', '<=', now())
+            ->whereDate('end_date', '>=', now())
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get(),
+        
+         'upcomingEvents' => AcademicCalendar::orderBy('start_date')
+              ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get(),
+
+    ];
     return view('dashboard', compact(
-        'permissions',
+        'permissions','data', 'admissionStats', 'chartData',
+        'Studentdata', 'student'
   
     ));
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -139,6 +225,11 @@ Route::get('/createPayment', [PaymentController::class, 'createPayment'])->name(
 Route::post('/students/save-payment', [PaymentController::class, 'storePayment'])->name('students.storePayment');
 Route::get('/viewPayments', [PaymentController::class, 'viewPayments'])->name('payments.viewPayments');
 
+    Route::get('/settings', [AdmissionSettingController::class, 'index'])->name('admission.settingsIndex');
+    Route::post('/settings', [AdmissionSettingController::class, 'store'])->name('admission.settingsStore');
+    Route::put('/settings/{admissionSetting}', [AdmissionSettingController::class, 'update'])->name('admission.settingsUpdate');
+    Route::post('/settings/{admissionSetting}/toggle', [AdmissionSettingController::class, 'toggle'])->name('admission.settingsToggle');
+
 // lecture functions
     Route::get('classes', [LectureClassController::class, 'index'])->name('classes.index');
     Route::get('classes/create', [LectureClassController::class, 'create'])->name('classes.create');
@@ -173,6 +264,17 @@ Route::get('/showapprovedadmission/{id}', [EnrollmentController::class, 'showApp
 Route::get('/showRejectedadmission/{id}', [EnrollmentController::class, 'showRejectedEnrollment'])->name('enrollment.showRejectedEnrollment');
 
 });
+
+// Announcements
+Route::resource('announcements', AnnouncementController::class)
+    ->middleware(['auth']);
+
+// Academic Calendar
+Route::resource('academic-calendar', AcademicCalendarController::class)
+    ->middleware(['auth']);
+Route::get('academic-calendar', [AcademicCalendarController::class, 'calendar'])
+    ->name('academic-calendar.calendar')
+    ->middleware(['auth']);
  Route::get('/enrollment.applynow', [EnrollmentController::class, 'index'])->name('enrollment.applynow');
  Route::get('/get-programs', [EnrollmentController::class, 'getPrograms']);
  Route::post('/admissionSumbit', [AdmissionController::class, 'store'])->name('admission.submit');

@@ -18,20 +18,41 @@ use App\Mail\AdmissionApprovedMail;
 use Illuminate\Support\Facades\Mail;
 class EnrollmentController extends Controller
 {
-    public function index()
-    {
-        $schools = School::with(['departments.programs' => function($query) {
-            $query->orderBy('name');
-        }])->orderBy('name')->get();
+   public function index()
+{
+    // Get only programs with open admissions
+    $programs = Program::with(['firstFee', 'admissionSetting'])
+        ->whereHas('admissionSetting', function($query) {
+            $query->where('is_open', true)
+                  ->where(function($q) {
+                      $q->whereNull('start_date')
+                        ->orWhere('start_date', '<=', now());
+                  })
+                  ->where(function($q) {
+                      $q->whereNull('end_date')
+                        ->orWhere('end_date', '>=', now());
+                  });
+        })
+        ->get();
 
-       $programs = Program::with('firstFee')->get();
+    // Check if any programs are open
+    $anyProgramsOpen = $programs->isNotEmpty();
 
-        
-        
-    $shortCourses = Program::where('qualification', 'Short Course')->orderBy('name')->get();
-        return view('enrollment.applynow', compact('schools','programs','shortCourses'));
-    }
+    $schools = School::with('departments.programs')
+        ->orderBy('name')
+        ->get();
 
+    $shortCourses = Program::where('qualification', 'Short Course')
+        ->orderBy('name')
+        ->get();
+
+    return view('enrollment.applynow', compact(
+        'schools',
+        'programs',
+        'shortCourses',
+        'anyProgramsOpen'
+    ));
+}
   public function PendingEnrollment()
 {
     $query = Admission::with('payment')

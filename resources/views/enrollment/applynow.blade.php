@@ -790,45 +790,101 @@
                     <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
                 
-       <form id="admissionForm" method="POST" action="{{ route('admission.submit') }}" enctype="multipart/form-data" novalidate>
+      <form id="admissionForm" method="POST" action="{{ route('admission.submit') }}" enctype="multipart/form-data" novalidate>
     @csrf   
 
     <!-- Step 1: Program Selection -->
     <div class="form-step active" id="step1">
         <h3 class="section-title">Select Your Program</h3>
 
-        <input type="hidden" name="program_id" id="selected_program" required>
+        @if($anyProgramsOpen)
+            <input type="hidden" name="program_id" id="selected_program" required>
 
-        <div class="row">
-            @foreach($programs as $program)
-            <div class="col-md-4 mb-4 d-flex">
-                <div class="card course-card flex-fill" data-course="{{ $program->id }}">
-                    <div class="course-card-header">
-                        <h5 class="mb-0">{{ $program->name }}</h5>
-                    </div>
-                    <div class="course-card-body">
-                        <p class="course-card-text">
-                            <i class="bi bi-clock me-1"></i> Duration: {{ $program->duration }} years
-                        </p>
-                        <p class="course-card-text">
-                            <i class="bi bi-cash-coin me-1"></i> Tuition:
-                            {{ $program->firstFee?->amount ?? 'N/A' }} Per Year
-                        </p>
-                        <button type="button" class="btn btn-select-course w-100" data-program="{{ $program->id }}">
-                            <i class="bi bi-check-lg me-1"></i> Select
-                        </button>
+            <div class="row">
+                @foreach($programs as $program)
+                @php
+                    $setting = $program->admissionSetting;
+                    $isCurrentlyOpen = $setting->is_open && 
+                                     (!$setting->start_date || now() >= $setting->start_date) && 
+                                     (!$setting->end_date || now() <= $setting->end_date);
+                @endphp
+                
+                @if($isCurrentlyOpen)
+                <div class="col-md-4 mb-4 d-flex">
+                    <div class="card course-card flex-fill" data-course="{{ $program->id }}">
+                        <div class="course-card-header">
+                            <h5 class="mb-0">{{ $program->name }}</h5>
+                        </div>
+                        <div class="course-card-body">
+                            <p class="course-card-text">
+                                <i class="bi bi-clock me-1"></i> Duration: {{ $program->duration }} years
+                            </p>
+                            <p class="course-card-text">
+                                <i class="bi bi-cash-coin me-1"></i> Tuition:
+                                {{ $program->firstFee?->amount ?? 'N/A' }} Per Year
+                            </p>
+                            @if($setting->start_date || $setting->end_date)
+                            <p class="course-card-text small text-muted">
+                                <i class="bi bi-calendar me-1"></i>
+                                {{ optional($setting->start_date)->format('M d') }} - 
+                                {{ optional($setting->end_date)->format('M d, Y') }}
+                            </p>
+                            @endif
+                            <button type="button" class="btn btn-select-course w-100" data-program="{{ $program->id }}">
+                                <i class="bi bi-check-lg me-1"></i> Select
+                            </button>
+                        </div>
                     </div>
                 </div>
+                @endif
+                @endforeach
             </div>
-            @endforeach
-        </div>
+        @else
+            <div class="alert alert-info text-center py-5">
+                <h4><i class="bi bi-hourglass-split me-2"></i> Applications Coming Soon</h4>
+                <p class="mb-0">We're currently not accepting applications. Please check back later.</p>
+                
+                @if($programs->isNotEmpty())
+                    <div class="mt-3">
+                        <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#closedPrograms">
+                            View All Programs
+                        </button>
+                        <div class="collapse mt-3" id="closedPrograms">
+                            <div class="card card-body">
+                                <ul class="list-group">
+                                    @foreach($programs as $program)
+                                    <li class="list-group-item">
+                                        <strong>{{ $program->name }}</strong>
+                                        @if($program->admissionSetting)
+                                            @if($program->admissionSetting->start_date && $program->admissionSetting->start_date > now())
+                                                (Opens {{ $program->admissionSetting->start_date->format('M d, Y') }})
+                                            @elseif($program->admissionSetting->end_date && $program->admissionSetting->end_date < now())
+                                                (Closed on {{ $program->admissionSetting->end_date->format('M d, Y') }})
+                                            @else
+                                                (Currently Closed)
+                                            @endif
+                                        @else
+                                            (Admissions Not Configured)
+                                        @endif
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        @endif
 
+        @if($anyProgramsOpen)
         <div class="d-flex justify-content-end mt-4">
             <button type="button" class="btn btn-next-step" disabled>
                 Next <i class="bi bi-arrow-right ms-2"></i>
             </button>
         </div>
+        @endif
     </div>
+</form>
 
     <!-- Step 2: Personal Details -->
     <div class="form-step" id="step2">

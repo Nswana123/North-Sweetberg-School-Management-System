@@ -508,7 +508,16 @@
                         </ul>
                     </li>
                     @endif 
-
+    @if($permissions->contains('name', 'Admissions Settings'))
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{route('admission.settingsIndex')}}">
+                            <i class="icon">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </i>
+                            <span class="item-name">Admissions Settings</span>
+                        </a>
+                    </li>
+                  @endif
         @if($permissions->contains('name', 'Add Student'))
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{route('students.createStudent')}}">
@@ -726,7 +735,26 @@
                         </a>
                     </li>
                   @endif
-
+                               @if($permissions->contains('name', 'Announcements'))
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{route('announcements.index')}}">
+                            <i class="icon">
+                                <i class="fas fa-file-signature"></i>
+                            </i>
+                            <span class="item-name">Announcements</span>
+                        </a>
+                    </li>
+                  @endif
+         @if($permissions->contains('name', 'Calendar'))
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{route('academic-calendar.calendar')}}">
+                            <i class="icon">
+                                <i class="fas fa-file-signature"></i>
+                            </i>
+                            <span class="item-name">Calendar</span>
+                        </a>
+                    </li>
+                  @endif
               
                @if($permissions->contains('name', 'systems settings section'))
 

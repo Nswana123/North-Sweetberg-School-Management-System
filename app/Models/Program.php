@@ -61,4 +61,11 @@ class Program extends Model
     {
         return $query->where('level', $level);
     }
+
+     public function admissionSetting()
+    {
+        return $this->hasOne(AdmissionSetting::class);
+    }
+
+   
 }
