@@ -722,6 +722,114 @@
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
 }
+.nav-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-left: 30px;
+}
+
+.btn-portal {
+  background-color: transparent;
+  color: rgb(255, 255, 255);
+  border: 2px solid var(--color-primary);
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: none;
+  letter-spacing: 0.5px;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.btn-apply-now {
+  background-color: white;
+  color: #000;
+  border: 2px solid var(--color-secondary);
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  letter-spacing: 0.5px;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+/* Hover states */
+.btn-portal:hover {
+  background-color: var(--color-primary);
+  color: rgb(111, 233, 136);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgb(231, 202, 202);
+}
+
+.btn-apply-now:hover {
+  background-color: #59df72;
+  border-color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1199px) {
+  .nav-buttons {
+    margin-left: 20px;
+    gap: 10px;
+  }
+  
+  .btn-portal,
+  .btn-apply-now {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 991px) {
+  .nav-buttons {
+    margin-left: 15px;
+    gap: 8px;
+  }
+  
+  .btn-portal,
+  .btn-apply-now {
+    padding: 7px 14px;
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Mobile menu styles */
+  .navbar .nav-buttons {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 20px 0 0 0;
+    gap: 10px;
+    align-items: stretch;
+  }
+  
+  /* Adjust button sizes for mobile */
+  .btn-portal,
+  .btn-apply-now {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    padding: 10px;
+  }
+  
+  /* Ensure mobile menu can accommodate buttons */
+  .navbar ul {
+    padding-bottom: 20px;
+  }
+}
     </style>
 </head>
 <body>
@@ -750,6 +858,10 @@
                         <a class="nav-link" href="#contact">Contact</a>
                     </li>
                 </ul>
+                  <div class="nav-buttons">
+        <a class="btn-portal" href="{{route('login')}}">Student Portal</a>
+        <a class="btn-apply-now" href="{{ route('enrollment.applynow') }}">Apply Now</a>
+      </div>
             </div>
         </div>
     </nav>
