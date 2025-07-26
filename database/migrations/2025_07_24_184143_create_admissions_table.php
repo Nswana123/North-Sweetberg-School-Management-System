@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('admissions', function (Blueprint $table) {
                $table->id();
-    $table->string('program');
+    $table->string('program_id');
     $table->string('title');
     $table->string('first_name');
     $table->string('last_name');
@@ -37,6 +37,7 @@ return new class extends Migration
     $table->string('certificates_path')->nullable();
     $table->string('photo_path')->nullable();
      $table->string('admission_status')->default('pending');
+      $table->string('rejected_comment')->nullable();
     $table->timestamps();
         });
     }

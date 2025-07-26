@@ -20,10 +20,11 @@ class Program extends Model
         'level' // Added this field to support degree/diploma/short course filtering
     ];
 
-    public function department()
-    {
-        return $this->belongsTo(Department::class);
-    }
+ public function department()
+{
+    return $this->belongsTo(Department::class);
+}
+
 
     public function courses()
     {
@@ -31,7 +32,10 @@ class Program extends Model
                     ->withPivot('year_of_study')
                     ->withTimestamps();
     }
-
+ public function admissions()
+    {
+        return $this->hasMany(Admission::class);
+    }
     public function fees()
     {
         return $this->hasMany(Fee::class);

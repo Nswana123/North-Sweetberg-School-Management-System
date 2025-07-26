@@ -133,6 +133,8 @@ Route::get('/results/final/pdf/{student}', [ResultsController::class, 'exportFin
 
 Route::get('/student/profile', [StudentController::class, 'profile'])->name('students.studentProfile');
 
+Route::get('/students/create', [StudentController::class, 'createStudent'])->name('students.createStudent');
+Route::post('/students', [StudentController::class, 'storeStudent'])->name('students.storeStudent');
 
 // lecture functions
     Route::get('classes', [LectureClassController::class, 'index'])->name('classes.index');
@@ -163,6 +165,9 @@ Route::post('/admissions/{id}/reject', [EnrollmentController::class, 'reject'])-
 
 Route::get('/approvedadmissions', [EnrollmentController::class, 'approvedEnrollment'])->name('enrollment.approvedEnrollment');
 Route::get('/rejectedadmissions', [EnrollmentController::class, 'rejectedEnrollment'])->name('enrollment.rejectedEnrollment');
+
+Route::get('/showapprovedadmission/{id}', [EnrollmentController::class, 'showApprovedEnrollment'])->name('enrollment.showApprovedEnrollment');
+Route::get('/showRejectedadmission/{id}', [EnrollmentController::class, 'showRejectedEnrollment'])->name('enrollment.showRejectedEnrollment');
 
 });
  Route::get('/enrollment.applynow', [EnrollmentController::class, 'index'])->name('enrollment.applynow');

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('lname');
             $table->string('email')->unique();
             $table->string('mobile'); 
+               $table->string('national_id'); 
             $table->string('status')->default('active');
             $table->string('location')->nullable();
             $table->string('group_id')->nullable();

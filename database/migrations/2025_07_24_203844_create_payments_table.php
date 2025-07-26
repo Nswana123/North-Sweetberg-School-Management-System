@@ -23,6 +23,7 @@ return new class extends Migration
     $table->string('bank_name')->nullable();
     $table->string('account_number')->nullable();
     $table->string('transaction_reference')->nullable();
+    $table->string('status')->default('pending');
     $table->timestamps();
 });
 

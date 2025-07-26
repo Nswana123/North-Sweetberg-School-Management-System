@@ -700,9 +700,20 @@
             }
         }
 
-   .course-card.selected {
-        border: 2px solid #198754;
-        box-shadow: 0 0 8px rgba(25, 135, 84, 0.6);
+    .course-card {
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .course-card.selected {
+        border-color: #0d6efd; /* Bootstrap primary color */
+        box-shadow: 0 0 10px rgba(13, 110, 253, 0.3);
+        background-color: rgba(13, 110, 253, 0.05);
+    }
+    
+    .course-card.selected .btn-select-course {
+        background-color: #0d6efd;
+        color: white;
     }
     </style>
 </head>
@@ -786,7 +797,7 @@
     <div class="form-step active" id="step1">
         <h3 class="section-title">Select Your Program</h3>
 
-        <input type="hidden" name="program" id="selected_program" required>
+        <input type="hidden" name="program_id" id="selected_program" required>
 
         <div class="row">
             @foreach($programs as $program)
@@ -1961,6 +1972,50 @@
         
         // If everything is valid, submit the form
         this.submit();
+    });
+});
+document.addEventListener('DOMContentLoaded', function() {
+    const programCards = document.querySelectorAll('.course-card');
+    const selectedProgramInput = document.getElementById('selected_program');
+    
+    // Get any previously selected program from the hidden input
+    const previouslySelected = selectedProgramInput.value;
+    if (previouslySelected) {
+        const prevCard = document.querySelector(`.course-card[data-course="${previouslySelected}"]`);
+        if (prevCard) {
+            prevCard.classList.add('selected');
+        }
+    }
+    
+    // Handle program selection
+    programCards.forEach(card => {
+        const selectBtn = card.querySelector('.btn-select-course');
+        
+        selectBtn.addEventListener('click', function() {
+            // Remove selected class from all cards
+            programCards.forEach(c => c.classList.remove('selected'));
+            
+            // Add selected class to clicked card
+            card.classList.add('selected');
+            
+            // Update the hidden input value
+            const programId = card.getAttribute('data-course');
+            selectedProgramInput.value = programId;
+            
+            // Optional: Scroll to next section
+            document.getElementById('step2').scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+    
+    // Optional: Also make the entire card clickable
+    programCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            // Don't trigger if clicking on the button itself
+            if (!e.target.closest('.btn-select-course')) {
+                const btn = card.querySelector('.btn-select-course');
+                btn.click();
+            }
+        });
     });
 });
 </script>

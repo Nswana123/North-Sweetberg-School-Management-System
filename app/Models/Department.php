@@ -11,10 +11,11 @@ class Department extends Model
 
     protected $fillable = ['name', 'school_id'];
 
-    public function school()
-    {
-        return $this->belongsTo(School::class);
-    }
+ public function school()
+{
+    return $this->belongsTo(School::class);
+}
+
 
     public function programs()
     {

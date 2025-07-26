@@ -551,7 +551,16 @@
                     </li>
                     @endif 
 
-
+        @if($permissions->contains('name', 'Add Student'))
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{route('students.createStudent')}}">
+                            <i class="icon">
+                                <i class="fas fa-users"></i>
+                            </i>
+                            <span class="item-name">Add Student</span>
+                        </a>
+                    </li>
+                  @endif
 
                              @if($permissions->contains('name', 'Students'))
                     <li class="nav-item">

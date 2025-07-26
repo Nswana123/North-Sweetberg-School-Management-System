@@ -11,7 +11,7 @@ class Admission extends Model
     protected $table = 'admissions';
 
     protected $fillable = [
-        'program',
+        'program_id',
         'title',
         'first_name',
         'last_name',
@@ -35,9 +35,14 @@ class Admission extends Model
         'certificates_path',
         'photo_path',
         'admission_status',
+        'rejected_comment',
     ];
        public function payment()
     {
         return $this->hasOne(Payment::class, 'admission_id');
+    }
+      public function program()
+    {
+        return $this->belongsTo(Program::class);
     }
 }

@@ -3,21 +3,24 @@
 namespace App\Http\Controllers;
 use App\Models\Admission;
 use App\Models\Payment;
+use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Mail\AdmissionAcknowledgmentMail;
+use Illuminate\Support\Facades\Mail;
 class AdmissionController extends Controller
 {
 public function store(Request $request)
 {
     $validator = Validator::make($request->all(), [
-        'program' => 'required|string',
+        'program_id' => 'required|string',
         'title' => 'required|string',
         'first_name' => 'required|string|max:255',
         'last_name' => 'required|string|max:255',
         'dob' => 'required|date',
         'gender' => 'required|string',
-        'national_id' => 'required|string|unique:admissions,national_id',
-        'email' => 'required|email|unique:admissions,email',
+        'national_id' => 'required|string',
+        'email' => 'required|email',
         'phone' => 'required|string',
         'street_address' => 'required|string',
         'city' => 'required|string',
@@ -52,7 +55,7 @@ public function store(Request $request)
     $validated = $validator->validated();
 
     $admission = new Admission();
-    $admission->program = $validated['program'];
+    $admission->program_id = $validated['program_id'];
     $admission->title = $validated['title'];
     $admission->first_name = $validated['first_name'];
     $admission->last_name = $validated['last_name'];
@@ -69,7 +72,7 @@ public function store(Request $request)
     $admission->next_of_kin_phone = $validated['next_of_kin_phone'];
     $admission->secondary_school = $validated['secondary_school'];
     $admission->completion_year = $validated['completion_year'];
-
+ 
     // Optional fields
     $admission->alt_phone = $request->input('alt_phone');
     $admission->postal_code = $request->input('postal_code');
@@ -114,9 +117,22 @@ if ($validated['payment_mode'] === 'mobile_money_payment') {
 
 $payment->save();
 
-    return redirect()->back()->with('success', 'Admission submitted successfully.');
+   // Get program name (assuming you have a Program model)
+    $programName = Program::find($validated['program_id'])->name ?? 'the selected program';
 
-// Or for error
-return redirect()->back()->with('error', 'Something went wrong. Please try again.');
+    // Send acknowledgment email
+    try {
+        Mail::to($validated['email'])
+            ->send(new AdmissionAcknowledgmentMail(
+                $validated['first_name'] . ' ' . $validated['last_name'],
+                $admission->id, // or generate a custom reference number
+                $programName
+            ));
+    } catch (\Exception $e) {
+        // Log the error but don't fail the submission
+        \Log::error('Failed to send admission acknowledgment email: ' . $e->getMessage());
+    }
+
+    return redirect()->back()->with('success', 'Admission submitted successfully. A confirmation email has been sent to your email address.');
 }
 }

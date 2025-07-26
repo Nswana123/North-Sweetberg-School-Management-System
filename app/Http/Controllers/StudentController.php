@@ -8,8 +8,14 @@ use App\Models\Campus;
 use App\Models\School;
 use App\Models\Department;
 use App\Models\Program;
+use App\Models\NextOfKin;
+use App\Models\StudentAddress;
 use Illuminate\Http\Request;
-
+use App\Mail\AdmissionApprovedMail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 class StudentController extends Controller
 {
     public function index(Request $request)
@@ -145,5 +151,130 @@ public function profile()
 
     return view('students.studentProfile', compact('student','permissions'));
 }
+
+ public function createStudent()
+    {
+        $programs = Program::with('department.school')->get();
+        $user = auth()->user();
+        $permissions = $user->user_group->permissions;
+        return view('students.createStudent', compact('programs','permissions'));
+    }
+
+    public function storeStudent(Request $request)
+    {
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'dob' => 'required|date',
+            'gender' => 'required|string',
+            'national_id' => 'required|string',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required|string',
+            'program_id' => 'required|exists:programs,id',
+            'year_of_study' => 'required|integer|min:1',
+            'secondary_school' => 'required|string',
+            'completion_year' => 'required|integer',
+            'street_address' => 'required|string',
+            'town' => 'required|string',
+            'province' => 'required|string',
+            'next_of_kin_name' => 'required|string',
+            'next_of_kin_relationship' => 'required|string',
+            'next_of_kin_phone' => 'required|string',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            // Get program details
+            $program = Program::with('department.school')->findOrFail($request->program_id);
+            $school = $program->department->school;
+            $campus = $school->campuses()->first();
+
+            if (!$campus) {
+                throw new \Exception("No campus associated with this school.");
+            }
+
+            // Generate student number
+            $currentYear = date('Y');
+            $lastUser = User::whereYear('created_at', $currentYear)
+                            ->whereNotNull('student_number')
+                            ->orderBy('student_number', 'desc')
+                            ->first();
+
+            if ($lastUser && preg_match('/^' . $currentYear . '(\d{6})$/', $lastUser->student_number, $matches)) {
+                $nextSequence = (int) $matches[1] + 1;
+            } else {
+                $nextSequence = 1;
+            }
+
+            $studentNumber = $currentYear . str_pad($nextSequence, 6, '0', STR_PAD_LEFT);
+          $temporaryPassword = 'Pass1234';
+
+            // Handle photo upload
+            $photoPath = null;
+            if ($request->hasFile('photo')) {
+                $photoPath = $request->file('photo')->store('student_photos', 'public');
+            }
+
+            // Create user
+            $user = User::create([
+                'student_number' => $studentNumber,
+                'fname' => $request->first_name,
+                'lname' => $request->last_name,
+                'email' => $request->email,
+                'national_id' => $request->national_id,
+                'mobile' => $request->phone,
+                'dob' => $request->dob,
+                'gender' => $request->gender,
+                'status' => 'active',
+                'location' => $request->town,
+                'group_id' => 2, // Assuming 2 is the student group
+                'email_verified_at' => now(),
+                'password' => Hash::make($temporaryPassword),
+                'photo_path' => $photoPath,
+            ]);
+
+            // Create student
+            $student = Student::create([
+                'user_id' => $user->id,
+                'campus_id' => $campus->id,
+                'school_id' => $school->id,
+                'department_id' => $program->department->id,
+                'program_id' => $program->id,
+                'year_of_study' => $request->year_of_study,
+                'status' => 'active',
+                'secondary_school' => $request->secondary_school,
+                'completion_year' => $request->completion_year,
+            ]);
+
+            // Create next of kin
+            NextOfKin::create([
+                'student_id' => $student->id,
+                'full_name' => $request->next_of_kin_name,
+                'relationship' => $request->next_of_kin_relationship,
+                'phone' => $request->next_of_kin_phone,
+            ]);
+
+            // Create student address
+            StudentAddress::create([
+                'student_id' => $student->id,
+                'physical_address' => $request->street_address,
+                'town' => $request->town,
+                'province' => $request->province,
+                'country' => 'Zambia',
+            ]);
+
+            DB::commit();
+
+       Mail::to($user->email)->send(new AdmissionApprovedMail($studentNumber, $temporaryPassword));
+
+            return redirect()->back()->with('success', 'Student created successfully. Temporary password: ' . $temporaryPassword);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Error creating student: ' . $e->getMessage())->withInput();
+        }
+    }
 
 }

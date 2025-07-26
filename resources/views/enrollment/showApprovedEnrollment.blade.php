@@ -210,69 +210,87 @@
         {{ session('success') }}
     </div>
 @endif 
+@if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
+
+
       <div>
          <div class="row">
             <div class="col-xl-12 col-lg-12">
             <div class="card">
- <div class="card-header d-flex justify-content-between align-items-center">
-    <div class="header-title">
-        <h5 class="mb-0">
-            Approved Admissions
-            <span class="badge bg-primary">{{ $admissions->total() }}</span>
-        </h5>
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="header-title">
+            <h5 class="mb-0">
+                Admission Details
+            </h5>
+        </div>
+      
     </div>
-    <div>
-        <form method="GET" action="{{ route('enrollment.approvedEnrollment') }}" class="row g-2 align-items-center">
-            <div class="col-auto">
-                <label for="start_date" class="visually-hidden">Start Date</label>
-                <input type="date" class="form-control form-control-sm" id="start_date" name="start_date" 
-                       value="{{ request('start_date') }}" placeholder="Start Date">
-            </div>
-            <div class="col-auto">
-                <label for="end_date" class="visually-hidden">End Date</label>
-                <input type="date" class="form-control form-control-sm" id="end_date" name="end_date" 
-                       value="{{ request('end_date') }}" placeholder="End Date">
-            </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-sm btn-primary">Filter</button>
-                @if(request('start_date') || request('end_date'))
-                    <a href="{{ route('enrollment.approvedEnrollment') }}" class="btn btn-sm btn-outline-secondary">Clear</a>
-                @endif
-            </div>
-        </form>
-    </div>
-</div>
 
     <div class="card-body">
-          <table class="table table-bordered mt-3">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Program</th>
-                <th>Phone</th>
-                <th>Status</th>
-                <th>Payment</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($admissions as $admission)
-                <tr>
-                    <td>{{ $admission->first_name }} {{ $admission->last_name }}</td>
-                    <td>{{ $admission->program->name }}</td>
-                    <td>{{ $admission->phone }}</td>
-                    <td>{{ $admission->admission_status ?? 'Pending' }}</td>
-                    <td>{{ $admission->payment->payment_mode ?? 'N/A' }} - {{ $admission->payment->amount ?? 'N/A' }}</td>
-                    <td>
-                        <a href="{{ route('enrollment.showApprovedEnrollment', $admission->id) }}" class="btn btn-sm btn-primary">View</a>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-     <div class="d-flex justify-content-center fade-in-up" style="animation-delay: 0.3s">
-            {!! $admissions->links() !!}
-        </div>
+    <ul class="list-group mb-4">
+        <li class="list-group-item"><strong>Program Name:</strong> {{ $admission->program->name }}</li>
+        <li class="list-group-item"><strong>Qualification:</strong> {{ $admission->program->qualification }}</li>
+        <li class="list-group-item"><strong>Duration:</strong> {{ $admission->program->duration }} years</li>
+         <li class="list-group-item"><strong>Admission Approved:</strong> {{ $admission->updated_at }}</li>
+    </ul>
+
+    <h4 class="mb-3 text-primary">Applicant Information</h4>
+    <ul class="list-group mb-4">
+        <li class="list-group-item"><strong>Full Name:</strong> {{ $admission->title }} {{ $admission->first_name }} {{ $admission->last_name }}</li>
+        <li class="list-group-item"><strong>Gender:</strong> {{ $admission->gender }}</li>
+        <li class="list-group-item"><strong>DOB:</strong> {{ $admission->dob }}</li>
+        <li class="list-group-item"><strong>National ID:</strong> {{ $admission->national_id }}</li>
+        <li class="list-group-item"><strong>Email:</strong> {{ $admission->email }}</li>
+        <li class="list-group-item"><strong>Phone:</strong> {{ $admission->phone }}</li>
+        <li class="list-group-item"><strong>Address:</strong> {{ $admission->street_address }}, {{ $admission->city }}, {{ $admission->province }}</li>
+        <li class="list-group-item"><strong>Next of Kin:</strong> {{ $admission->next_of_kin_name }} ({{ $admission->next_of_kin_relationship }}) - {{ $admission->next_of_kin_phone }}</li>
+        <li class="list-group-item"><strong>Secondary School:</strong> {{ $admission->secondary_school }} ({{ $admission->completion_year }})</li>
+        <li class="list-group-item"><strong>Status:</strong>
+            <span class="badge
+                @if($admission->admission_status == 'approved') bg-success
+                @elseif($admission->admission_status == 'rejected') bg-danger
+                @else bg-secondary @endif">
+                {{ $admission->admission_status ?? 'Pending' }}
+            </span>
+        </li>
+    </ul>
+
+    <h4 class="mb-3 text-primary">Uploaded Documents</h4>
+    <ul class="list-group mb-4">
+        @if($admission->id_document_path)
+            <li class="list-group-item"><a href="{{ asset('storage/' . $admission->id_document_path) }}" target="_blank">ID Document</a></li>
+        @endif
+        @if($admission->certificates_path)
+            <li class="list-group-item"><a href="{{ asset('storage/' . $admission->certificates_path) }}" target="_blank">Certificates</a></li>
+        @endif
+        @if($admission->photo_path)
+            <li class="list-group-item"><a href="{{ asset('storage/' . $admission->photo_path) }}" target="_blank">Photo</a></li>
+        @endif
+    </ul>
+
+    <h4 class="mb-3 text-primary">Payment Info</h4>
+    @if($admission->payment)
+        <ul class="list-group mb-4">
+            <li class="list-group-item"><strong>Mode:</strong> {{ $admission->payment->payment_mode }}</li>
+            <li class="list-group-item"><strong>Amount:</strong> {{ $admission->payment->amount }}</li>
+            <li class="list-group-item"><strong>Reference:</strong> {{ $admission->payment->transaction_reference }}</li>
+            <li class="list-group-item"><strong>Payment Status:</strong> {{ $admission->payment->status }}</li>
+        </ul>
+    @else
+        <p>No payment details available.</p>
+    @endif
+
+    <div class="mt-4">
+
+        <a href="{{ route('enrollment.PendingEnrollment') }}" class="btn btn-secondary float-end">Back to List</a>
+    </div>
+    </div>
     </div>
 </div>
 
