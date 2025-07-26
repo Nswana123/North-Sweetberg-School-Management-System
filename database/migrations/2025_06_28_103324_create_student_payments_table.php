@@ -14,6 +14,7 @@ class CreateStudentPaymentsTable extends Migration
             $table->decimal('amount', 10, 2);
             $table->string('method')->nullable(); // e.g., Cash, Mobile Money, Bank
             $table->string('reference')->nullable(); // e.g., Txn ID
+             $table->string('payment_purpose')->nullable();
             $table->string('status')->default('successful');
             $table->timestamps();
         });

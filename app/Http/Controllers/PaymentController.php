@@ -8,7 +8,11 @@ use App\Models\Campus;
 use App\Models\School;
 use App\Models\Department;
 use App\Models\Program;
+use App\Models\StudentPayment;
+use App\Models\Payment;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
@@ -145,51 +149,75 @@ public function transactions(Student $student)
     return view('payments.transactions', compact('student','permissions'));
 }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+      public function createPayment()
+    { 
+        $user = auth()->user();
+     $permissions = $user->user_group->permissions;
+        return view('students.createPayment', compact('permissions'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function storePayment(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'payment_purpose' => 'required|string',
+            'method' => 'required|string',
+            'amount' => 'required|numeric|min:0.01',
+            'reference' => 'nullable|string',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        StudentPayment::create([
+            'student_id' => Auth::id(), // Ensure student is logged in
+            'amount' => $request->amount,
+            'method' => $request->method,
+            'reference' => $request->reference,
+            'payment_purpose' => $request->payment_purpose,
+            'status' => 'successful', // You can add pending/verification logic
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return redirect()->route('students.createPayment')->with('success', 'Payment submitted successfully!');
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function viewPayments(Request $request)
     {
-        //
-    }
+       // Admission Payments Query
+        $admissionQuery = Payment::with(['admission.program']);
+        
+        // Apply admission date filter
+        if ($request->filled('admission_date')) {
+            $admissionDate = Carbon::parse($request->input('admission_date'));
+            $admissionQuery->whereDate('created_at', $admissionDate);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $admissionPayments = $admissionQuery->orderBy('created_at', 'desc')
+            ->paginate(10, ['*'], 'admission_page');
+
+        // Student Payments Query
+        $studentQuery = StudentPayment::with(['student.user', 'student.program']);
+        
+        // Apply student payment date filter
+        if ($request->filled('student_payment_date')) {
+            $studentPaymentDate = Carbon::parse($request->input('student_payment_date'));
+            $studentQuery->whereDate('created_at', $studentPaymentDate);
+        }
+        
+        // Apply student number filter
+        if ($request->filled('student_number')) {
+            $studentNumber = $request->input('student_number');
+            $studentQuery->whereHas('student.user', function($q) use ($studentNumber) {
+                $q->where('student_number', 'like', "%{$studentNumber}%");
+            });
+        }
+
+        $studentPayments = $studentQuery->orderBy('created_at', 'desc')
+            ->paginate(10, ['*'], 'student_page');
+
+        // Get all student numbers for select dropdown
+        $studentNumbers = User::whereNotNull('student_number')
+            ->orderBy('student_number')
+            ->pluck('student_number');
+
+        $user = auth()->user();
+     $permissions = $user->user_group->permissions;
+
+        return view('payments.viewPayments', compact('admissionPayments','studentNumbers', 'studentPayments','permissions'));
     }
 }

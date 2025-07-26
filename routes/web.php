@@ -135,6 +135,9 @@ Route::get('/student/profile', [StudentController::class, 'profile'])->name('stu
 
 Route::get('/students/create', [StudentController::class, 'createStudent'])->name('students.createStudent');
 Route::post('/students', [StudentController::class, 'storeStudent'])->name('students.storeStudent');
+Route::get('/createPayment', [PaymentController::class, 'createPayment'])->name('students.createPayment');
+Route::post('/students/save-payment', [PaymentController::class, 'storePayment'])->name('students.storePayment');
+Route::get('/viewPayments', [PaymentController::class, 'viewPayments'])->name('payments.viewPayments');
 
 // lecture functions
     Route::get('classes', [LectureClassController::class, 'index'])->name('classes.index');

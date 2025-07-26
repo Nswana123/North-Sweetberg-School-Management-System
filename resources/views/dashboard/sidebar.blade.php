@@ -573,6 +573,28 @@
                     </li>
                   @endif
 
+                            @if($permissions->contains('name', 'make payments'))
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{route('students.createPayment')}}">
+                            <i class="icon">
+                                <i class="fas fa-users"></i>
+                            </i>
+                            <span class="item-name">Pay Here</span>
+                        </a>
+                    </li>
+                  @endif
+
+                         @if($permissions->contains('name', 'Payment Management'))
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{route('payments.viewPayments')}}">
+                            <i class="icon">
+                                <i class="fas fa-users"></i>
+                            </i>
+                            <span class="item-name">Payment Management</span>
+                        </a>
+                    </li>
+                  @endif
+
                              @if($permissions->contains('name', 'Students Statements'))
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{route('payments.index')}}">
