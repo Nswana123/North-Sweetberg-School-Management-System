@@ -715,6 +715,121 @@
         background-color: #0d6efd;
         color: white;
     }
+    .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+}
+.nav-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-left: 30px;
+}
+
+.btn-portal {
+  background-color: transparent;
+  color: rgb(255, 255, 255);
+  border: 2px solid var(--color-primary);
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: none;
+  letter-spacing: 0.5px;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.btn-apply-now {
+  background-color: white;
+  color: #000;
+  border: 2px solid var(--color-secondary);
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  letter-spacing: 0.5px;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+/* Hover states */
+.btn-portal:hover {
+  background-color: var(--color-primary);
+  color: rgb(111, 233, 136);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgb(231, 202, 202);
+}
+
+.btn-apply-now:hover {
+  background-color: #59df72;
+  border-color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1199px) {
+  .nav-buttons {
+    margin-left: 20px;
+    gap: 10px;
+  }
+  
+  .btn-portal,
+  .btn-apply-now {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 991px) {
+  .nav-buttons {
+    margin-left: 15px;
+    gap: 8px;
+  }
+  
+  .btn-portal,
+  .btn-apply-now {
+    padding: 7px 14px;
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Mobile menu styles */
+  .navbar .nav-buttons {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 20px 0 0 0;
+    gap: 10px;
+    align-items: stretch;
+  }
+  
+  /* Adjust button sizes for mobile */
+  .btn-portal,
+  .btn-apply-now {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    padding: 10px;
+  }
+  
+  /* Ensure mobile menu can accommodate buttons */
+  .navbar ul {
+    padding-bottom: 20px;
+  }
+}
     </style>
 </head>
 <body>
@@ -722,8 +837,8 @@
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="https://via.placeholder.com/40x40/2c3e50/ffffff?text=NSUC" alt="NSUC Logo" height="40" class="d-inline-block align-top">
-                <span class="ms-2">North Sweetberg UC</span>
+                <img src="NORTH LOGO.png" alt="NSUC Logo" height="40" class="d-inline-block align-top">
+                <span class="ms-2">North Sweetberg University College</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -743,6 +858,10 @@
                         <a class="nav-link" href="#contact">Contact</a>
                     </li>
                 </ul>
+                  <div class="nav-buttons">
+        <a class="btn-portal" href="{{route('login')}}">Student Portal</a>
+        <a class="btn-apply-now" href="{{ route('enrollment.applynow') }}">Apply Now</a>
+      </div>
             </div>
         </div>
     </nav>
@@ -750,7 +869,7 @@
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="container text-center hero-content">
-            <h1 class="hero-title display-4 fw-bold">Begin Your Academic Journey</h1>
+            <h1 class="hero-title display-4 fw-bold" id="home">Begin Your Academic Journey</h1>
             <p class="hero-subtitle lead">Apply for short courses, diploma or degree programs at North Sweetberg University College and unlock your potential with our world-class education</p>
             <a href="#apply" class="btn btn-cta btn-lg">Start Application</a>
         </div>
@@ -1453,7 +1572,7 @@
             <div class="row">
                 <div class="col-lg-4 mb-4">
                     <div class="footer-logo">
-                        <img src="https://via.placeholder.com/40x40/ffffff/2c3e50?text=NSUC" alt="NSUC Logo" height="40">
+                        <img src="NORTH LOGO.png" alt="NSUC Logo" height="40">
                         <span class="ms-2">North Sweetberg UC</span>
                     </div>
                     <div class="footer-about">
@@ -1503,7 +1622,7 @@
             </div>
             
             <div class="footer-bottom">
-                <p class="mb-0">&copy; 2023 North Sweetberg University College. All rights reserved.</p>
+                <p class="mb-0">&copy; 2025 North Sweetberg University College. All rights reserved.</p>
             </div>
         </div>
     </footer>

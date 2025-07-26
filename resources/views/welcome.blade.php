@@ -63,42 +63,124 @@
     .navbar a:hover {
       color: #06ec11;
     }
-   .btn-apply-now { 
-      position: relative;
-      background-color: var(--color-secondary);
-      color: #000;
-      border: 2px solid var(--color-secondary);
-      border-radius: 6px;
-      padding: 10px 10px;
-      margin-right: 60px;
-      font-weight: 600; 
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-    }
-  .btn-portal {
-  background-color: #334C66;
-  color: #ffffff; 
-  border: 2px solid var(#032247);
-  border-radius: 6px;
-  padding: 10px 10px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  /* Navigation Buttons */
+/* Navigation Buttons - Updated for better visibility at all sizes */
+.nav-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-left: 30px;
 }
-.btn-portal:hover {
+
+.btn-portal {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: none;
+  letter-spacing: 0.5px;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.btn-apply-now {
   background-color: var(--color-secondary);
-  color: var(--color-white);
-  border-color: #18246b;
+  color: #000;
+  border: 2px solid var(--color-secondary);
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  letter-spacing: 0.5px;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+/* Hover states */
+.btn-portal:hover {
+  background-color: var(--color-primary);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .btn-apply-now:hover {
-  background-color: #18246b;
-  color: var(--color-white);
-  border-color: #18246b;
+  background-color: #000000;
+  border-color: #000000;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
+/* Responsive adjustments */
+@media (max-width: 1199px) {
+  .nav-buttons {
+    margin-left: 20px;
+    gap: 10px;
+  }
+  
+  .btn-portal,
+  .btn-apply-now {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 991px) {
+  .nav-buttons {
+    margin-left: 15px;
+    gap: 8px;
+  }
+  
+  .btn-portal,
+  .btn-apply-now {
+    padding: 7px 14px;
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Mobile menu styles */
+  .navbar .nav-buttons {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 20px 0 0 0;
+    gap: 10px;
+    align-items: stretch;
+  }
+  
+  /* Adjust button sizes for mobile */
+  .btn-portal,
+  .btn-apply-now {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    padding: 10px;
+  }
+  
+  /* Ensure mobile menu can accommodate buttons */
+  .navbar ul {
+    padding-bottom: 20px;
+  }
+}
+
+@media (max-width: 575px) {
+  .btn-portal,
+  .btn-apply-now {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+}
    /* Hero Section */
 .hero {
   background: linear-gradient(rgba(0, 31, 63, 0.8), rgba(0, 31, 63, 0.8)), url('assets/img/campus-hero.jpg');
@@ -435,41 +517,61 @@
       background: var(--color-secondary);
       color: var(--color-primary);
     }
+    .nav-buttons {
+  display: flex;
+  gap: 15px;
+  margin-left: 20px;
+}
+
+/* Remove the margin-right from btn-apply-now */
+.btn-apply-now {
+  position: relative;
+  background-color: var(--color-secondary);
+  color: #000;
+  border: 2px solid var(--color-secondary);
+  border-radius: 6px;
+  padding: 10px 10px;
+  /* Remove margin-right: 60px; */
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
   </style>
 </head>
 
 <body>
 
   <!-- ======= Header ======= -->
-  <header id="header" class="header fixed-top d-flex align-items-center">
-    <div class="container d-flex align-items-center justify-content-between">
+<!-- ======= Header ======= -->
+<header id="header" class="header fixed-top d-flex align-items-center">
+  <div class="container d-flex align-items-center justify-content-between">
 
-      <a href="index.html" class="logo d-flex align-items-center me-auto me-lg-0">
-        <h1>NORTH SWEETBERG UNIVERSITY</h1>
-      </a>
+    <a href="index.html" class="logo d-flex align-items-center me-auto me-lg-0">
+      <h1>NORTH SWEETBERG UNIVERSITY</h1>
+    </a>
 
-      <nav id="navbar" class="navbar">
-        <ul>
-          <li><a href="#hero">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#programs">Programs</a></li>
-          <li><a href="#admissions">Admissions</a></li>
-          <li><a href="#research">Research</a></li>
-        </ul>
-      </nav><!-- .navbar -->
+    <nav id="navbar" class="navbar">
+      <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#programs">Programs</a></li>
+        <li><a href="#admissions">Admissions</a></li>
+        <li><a href="#research">Research</a></li>
 
-      <a class="btn-portal" href="{{route('login')}}">Student Portal</a>
+      
+      <div class="nav-buttons">
+        <a class="btn-portal" href="{{route('login')}}">Student Portal</a>
+        <a class="btn-apply-now" href="{{ route('enrollment.applynow') }}">Apply Now</a>
+      </div>
+            </ul>
+    </nav><!-- .navbar -->
 
+    <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+    <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
 
-    </div>
-     </nav><!-- .navbar -->
-
-      <a class="btn-apply-now" href="{{ route('enrollment.applynow') }}">Apply Now</a>
-      <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
-      <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
-
-    </div>
-  </header><!-- End Header -->
+  </div>
+</header><!-- End Header -->
 
 <!-- ======= Hero Section ======= -->
 
@@ -972,11 +1074,11 @@
               
               <div class="program-content">
                 <div class="program-meta-tags">
-                  <span class="meta-tag duration"><i class="bi bi-clock"></i> 8 Weeks</span>
+                  <span class="meta-tag duration"><i class="bi bi-clock"></i> 1 Year</span>
                   <span class="meta-tag level"><i class="bi bi-bar-chart"></i> Intermediate</span>
                 </div>
                 
-                <h3 class="program-name">Full Stack Development</h3>
+                <h3 class="program-name">Web Development</h3>
                 <p class="program-description">
                   Master modern web development with React, Node.js, and MongoDB. Build deployable applications with industry best practices.
                 </p>
@@ -992,7 +1094,7 @@
                   </div>
                 </div>
                 
-                <a href="#" class="advanced-apply-btn">
+                <a href="{{ route('enrollment.applynow') }}" class="advanced-apply-btn">
                   <span>Apply Now</span>
                   <div class="btn-dynamic-border"></div>
                   <i class="bi bi-arrow-right"></i>
@@ -1032,7 +1134,7 @@
                   </div>
                 </div>
                 
-                <a href="#" class="advanced-apply-btn">
+                <a href="{{ route('enrollment.applynow') }}" class="advanced-apply-btn">
                   <span>Apply Now</span>
                   <div class="btn-dynamic-border"></div>
                   <i class="bi bi-arrow-right"></i>
@@ -1053,7 +1155,7 @@
               
               <div class="program-content">
                 <div class="program-meta-tags">
-                  <span class="meta-tag duration"><i class="bi bi-clock"></i> 6 Weeks</span>
+                  <span class="meta-tag duration"><i class="bi bi-clock"></i> 1 year</span>
                   <span class="meta-tag level"><i class="bi bi-bar-chart"></i> Beginner</span>
                 </div>
                 
@@ -1073,7 +1175,7 @@
                   </div>
                 </div>
                 
-                <a href="#" class="advanced-apply-btn">
+                <a href="{{ route('enrollment.applynow') }}" class="advanced-apply-btn">
                   <span>Apply Now</span>
                   <div class="btn-dynamic-border"></div>
                   <i class="bi bi-arrow-right"></i>
@@ -1125,7 +1227,7 @@
                   </div>
                 </div>
                 
-                <a href="#" class="advanced-apply-btn">
+                <a href="{{ route('enrollment.applynow') }}" class="advanced-apply-btn">
                   <span>Apply Now</span>
                   <div class="btn-dynamic-border"></div>
                   <i class="bi bi-arrow-right"></i>
@@ -1165,7 +1267,7 @@
                   </div>
                 </div>
                 
-                <a href="#" class="advanced-apply-btn">
+                <a href="{{ route('enrollment.applynow') }}" class="advanced-apply-btn">
                   <span>Apply Now</span>
                   <div class="btn-dynamic-border"></div>
                   <i class="bi bi-arrow-right"></i>
@@ -1206,7 +1308,7 @@
                   </div>
                 </div>
                 
-                <a href="#" class="advanced-apply-btn">
+                <a href="{{ route('enrollment.applynow') }}" class="advanced-apply-btn">
                   <span>Apply Now</span>
                   <div class="btn-dynamic-border"></div>
                   <i class="bi bi-arrow-right"></i>
@@ -1258,7 +1360,7 @@
                   </div>
                 </div>
                 
-                <a href="#" class="advanced-apply-btn">
+                <a href="{{route('enrollment.applynow') }}" class="advanced-apply-btn">
                   <span>Apply Now</span>
                   <div class="btn-dynamic-border"></div>
                   <i class="bi bi-arrow-right"></i>
@@ -1298,7 +1400,7 @@
                   </div>
                 </div>
                 
-                <a href="#" class="advanced-apply-btn">
+                <a href="{{ route('enrollment.applynow') }}" class="advanced-apply-btn">
                   <span>Apply Now</span>
                   <div class="btn-dynamic-border"></div>
                   <i class="bi bi-arrow-right"></i>
@@ -1339,7 +1441,7 @@
                   </div>
                 </div>
                 
-                <a href="#" class="advanced-apply-btn">
+                <a href="{{ route('enrollment.applynow') }}" class="advanced-apply-btn">
                   <span>Apply Now</span>
                   <div class="btn-dynamic-border"></div>
                   <i class="bi bi-arrow-right"></i>
@@ -2520,6 +2622,21 @@ document.addEventListener('DOMContentLoaded', function() {
     container.appendChild(shape);
   }
 });
+ document.querySelectorAll('.btn-apply-now').forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth'
+        });
+      } else {
+        // Fallback in case the target doesn't exist
+        window.location.href = this.getAttribute('href');
+      }
+    });
+  });
+  
 </script>
 
 
@@ -2585,122 +2702,103 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     </div>
     <script>
-      // Create floating shapes
-      const floatingShapes = document.getElementById('floatingShapes');
-      for (let i = 0; i < 15; i++) {
-          const shape = document.createElement('div');
-          const size = Math.random() * 100 + 50;
-          const posX = Math.random() * window.innerWidth;
-          const posY = Math.random() * window.innerHeight + window.innerHeight;
-          const delay = Math.random() * 15;
-          const duration = Math.random() * 10 + 10;
-          
-          shape.style.width = `${size}px`;
-          shape.style.height = `${size}px`;
-          shape.style.left = `${posX}px`;
-          shape.style.top = `${posY}px`;
-          shape.style.animationDelay = `${delay}s`;
-          shape.style.animationDuration = `${duration}s`;
-          
-          floatingShapes.appendChild(shape);
-      }
-      
-      // Animation trigger when page loads
-      document.addEventListener('DOMContentLoaded', function() {
-          // Force all animations to play (for browsers that might not trigger them automatically)
-          const animatedElements = document.querySelectorAll('[style*="animation"]');
-          animatedElements.forEach(el => {
-              el.style.animationPlayState = 'running';
-          });
-      });
-      // Add this script at the end of your file or in a separate JS file
-document.addEventListener('DOMContentLoaded', function() {
-  // Image carousel functionality
-  const images = document.querySelectorAll('.image-carousel img');
-  const dots = document.querySelectorAll('.carousel-dots span');
-  let currentIndex = 0;
-  
-  // Create dots dynamically
-  const carouselDots = document.querySelector('.carousel-dots');
-  images.forEach((_, index) => {
-    const dot = document.createElement('span');
-    if(index === 0) dot.classList.add('active');
-    dot.addEventListener('click', () => goToSlide(index));
-    carouselDots.appendChild(dot);
+  // Main initialization when DOM is loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize floating shapes
+    initFloatingShapes();
+    
+    // Initialize image carousel
+    initImageCarousel();
+    
+    // Initialize all Apply Now buttons
+    initApplyNowButtons();
   });
-  
-  function updateCarousel() {
-    images.forEach((img, index) => {
-      img.classList.toggle('active', index === currentIndex);
+
+  function initFloatingShapes() {
+    const floatingShapes = document.getElementById('floatingShapes');
+    if (!floatingShapes) return;
+    
+    for (let i = 0; i < 15; i++) {
+      const shape = document.createElement('div');
+      const size = Math.random() * 100 + 50;
+      const posX = Math.random() * window.innerWidth;
+      const posY = Math.random() * window.innerHeight + window.innerHeight;
+      const delay = Math.random() * 15;
+      const duration = Math.random() * 10 + 10;
+      
+      shape.style.width = `${size}px`;
+      shape.style.height = `${size}px`;
+      shape.style.left = `${posX}px`;
+      shape.style.top = `${posY}px`;
+      shape.style.animationDelay = `${delay}s`;
+      shape.style.animationDuration = `${duration}s`;
+      
+      floatingShapes.appendChild(shape);
+    }
+  }
+
+  function initImageCarousel() {
+    const images = document.querySelectorAll('.image-carousel img');
+    if (images.length === 0) return;
+    
+    const dotsContainer = document.querySelector('.carousel-dots');
+    let currentIndex = 0;
+    
+    // Create dots
+    images.forEach((_, index) => {
+      const dot = document.createElement('span');
+      if (index === 0) dot.classList.add('active');
+      dot.addEventListener('click', () => goToSlide(index));
+      dotsContainer.appendChild(dot);
     });
     
-    document.querySelectorAll('.carousel-dots span').forEach((dot, index) => {
-      dot.classList.toggle('active', index === currentIndex);
-    });
-  }
-  
-  function goToSlide(index) {
-    currentIndex = index;
-    updateCarousel();
-  }
-  
-  function nextSlide() {
-    currentIndex = (currentIndex + 1) % images.length;
-    updateCarousel();
-  }
-  
-  // Auto-rotate images every 5 seconds
-  setInterval(nextSlide, 5000);
-  
-  // Floating shapes
-  const floatingShapes = document.getElementById('floatingShapes');
-  const shapes = ['circle', 'triangle', 'square'];
-  const colors = ['rgba(255, 255, 255, 0.1)', 'rgba(255, 255, 255, 0.07)', 'rgba(255, 255, 255, 0.05)'];
-  
-  for(let i = 0; i < 8; i++) {
-    const shape = document.createElement('div');
-    const size = Math.random() * 50 + 20;
-    const posX = Math.random() * 100;
-    const posY = Math.random() * 100;
-    const delay = Math.random() * 10;
-    const duration = Math.random() * 15 + 10;
-    const shapeType = shapes[Math.floor(Math.random() * shapes.length)];
-    
-    shape.style.width = `${size}px`;
-    shape.style.height = `${size}px`;
-    shape.style.left = `${posX}%`;
-    shape.style.top = `${posY}%`;
-    shape.style.animationDelay = `${delay}s`;
-    shape.style.animationDuration = `${duration}s`;
-    shape.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-    
-    if(shapeType === 'circle') {
-      shape.style.borderRadius = '50%';
-    } else if(shapeType === 'triangle') {
-      shape.style.width = '0';
-      shape.style.height = '0';
-      shape.style.backgroundColor = 'transparent';
-      shape.style.borderLeft = `${size/2}px solid transparent`;
-      shape.style.borderRight = `${size/2}px solid transparent`;
-      shape.style.borderBottom = `${size}px solid ${colors[Math.floor(Math.random() * colors.length)]}`;
+    function updateCarousel() {
+      images.forEach((img, index) => {
+        img.classList.toggle('active', index === currentIndex);
+      });
+      
+      document.querySelectorAll('.carousel-dots span').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentIndex);
+      });
     }
     
-    shape.style.position = 'absolute';
-    shape.style.opacity = '0.5';
-    shape.style.animation = `float ${duration}s infinite linear`;
+    function goToSlide(index) {
+      currentIndex = index;
+      updateCarousel();
+    }
     
-    floatingShapes.appendChild(shape);
+    function nextSlide() {
+      currentIndex = (currentIndex + 1) % images.length;
+      updateCarousel();
+    }
+    
+    // Auto-rotate images every 5 seconds
+    setInterval(nextSlide, 5000);
   }
-});
-  // Apply Now button smooth scroll
-  document.querySelector('.btn-apply-now').addEventListener('click', function(e) {
-    e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
-    target.scrollIntoView({
-      behavior: 'smooth'
+
+  function initApplyNowButtons() {
+    // Handle all Apply Now buttons
+    document.querySelectorAll('.btn-apply-now').forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetUrl = this.getAttribute('href');
+        
+        // Check if this is an anchor link (starts with #)
+        if (targetUrl.startsWith('#')) {
+          const targetElement = document.querySelector(targetUrl);
+          if (targetElement) {
+            targetElement.scrollIntoView({
+              behavior: 'smooth'
+            });
+          }
+        } else {
+          // Regular link - navigate to URL
+          window.location.href = targetUrl;
+        }
+      });
     });
-  });
-  </script>
+  }
+</script>
   
   </footer><!-- End Footer -->
 
