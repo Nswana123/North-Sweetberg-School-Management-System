@@ -715,6 +715,13 @@
         background-color: #0d6efd;
         color: white;
     }
+    .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+}
     </style>
 </head>
 <body>
@@ -722,8 +729,8 @@
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="https://via.placeholder.com/40x40/2c3e50/ffffff?text=NSUC" alt="NSUC Logo" height="40" class="d-inline-block align-top">
-                <span class="ms-2">North Sweetberg UC</span>
+                <img src="NORTH LOGO.png" alt="NSUC Logo" height="40" class="d-inline-block align-top">
+                <span class="ms-2">North Sweetberg University College</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -750,7 +757,7 @@
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="container text-center hero-content">
-            <h1 class="hero-title display-4 fw-bold">Begin Your Academic Journey</h1>
+            <h1 class="hero-title display-4 fw-bold" id="home">Begin Your Academic Journey</h1>
             <p class="hero-subtitle lead">Apply for short courses, diploma or degree programs at North Sweetberg University College and unlock your potential with our world-class education</p>
             <a href="#apply" class="btn btn-cta btn-lg">Start Application</a>
         </div>
@@ -1397,7 +1404,7 @@
             <div class="row">
                 <div class="col-lg-4 mb-4">
                     <div class="footer-logo">
-                        <img src="https://via.placeholder.com/40x40/ffffff/2c3e50?text=NSUC" alt="NSUC Logo" height="40">
+                        <img src="NORTH LOGO.png" alt="NSUC Logo" height="40">
                         <span class="ms-2">North Sweetberg UC</span>
                     </div>
                     <div class="footer-about">
@@ -1447,7 +1454,7 @@
             </div>
             
             <div class="footer-bottom">
-                <p class="mb-0">&copy; 2023 North Sweetberg University College. All rights reserved.</p>
+                <p class="mb-0">&copy; 2025 North Sweetberg University College. All rights reserved.</p>
             </div>
         </div>
     </footer>

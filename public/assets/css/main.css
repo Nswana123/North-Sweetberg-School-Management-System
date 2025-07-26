@@ -307,7 +307,7 @@ section {
 .header .btn-book-a-table:hover,
 .header .btn-book-a-table:focus:hover {
   color: #fff;
-  background: rgb(115, 233, 5);
+  background: rgb(48, 189, 20);
 }
 
 section {
@@ -473,7 +473,7 @@ section {
     right: -100%;
     width: 100%;
     max-width: 400px;
-    border-left: 1px solid #22e708;
+    border-left: 1px solid #1d7ae3;
     bottom: 0;
     transition: 0.3s;
     z-index: 9997;
@@ -497,7 +497,7 @@ section {
     justify-content: space-between;
     padding: 10px 20px;
     font-family: var(--font-secondary);
-    border-bottom: 2px solid rgba(32, 228, 7, 0.973); 
+    border-bottom: 2px solid rgba(0, 0, 0, 0.973); 
     font-size: 16px;
     font-weight: 600;
     color: #161615;
@@ -519,7 +519,7 @@ section {
 
   .navbar .active,
   .navbar .active:focus {
-    color: #5c665c;
+    color: #26e026; 
     border-color: var(--color-primary);
   }
 
